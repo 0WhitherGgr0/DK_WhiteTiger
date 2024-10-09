@@ -8,7 +8,6 @@ const App = () => {
   const [items, setItems] = useState([]);
   const [currentItem, setCurrentItem] = useState(null);
 
-  // Obtener la lista de items de la API
   const fetchItems = async () => {
     try {
       const response = await fetch(`${API_URL}/`);
@@ -26,10 +25,8 @@ const App = () => {
     fetchItems();
   }, []);
 
-  // Agregar o editar un item en la API
   const addOrEditItem = async (item) => {
     if (item.id) {
-      // Si el item tiene un ID, significa que es una actualización
       try {
         const response = await fetch(`${API_URL}/edit/${item.id}`, {
           method: 'PUT',
@@ -51,7 +48,6 @@ const App = () => {
         console.error('Error al actualizar el item:', error);
       }
     } else {
-      // Si el item no tiene un ID, significa que es un nuevo item
       try {
         const response = await fetch(`${API_URL}/add`, {
           method: 'POST',
@@ -81,7 +77,6 @@ const App = () => {
     setCurrentItem(null);
   };
 
-  // Eliminar un item en la API
   const deleteItem = async (id) => {
     try {
       const response = await fetch(`${API_URL}/delete/${id}`, {
@@ -98,7 +93,6 @@ const App = () => {
     }
   };
 
-  // Editar un item (solo cambia el estado)
   const editItem = (item) => {
     setCurrentItem(item);
   };
