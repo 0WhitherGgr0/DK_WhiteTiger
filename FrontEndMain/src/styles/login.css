@@ -1,0 +1,171 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root{
+    --lightBlue1: #E3F1FF;
+    --lightBlue2: #d8e4f3;
+    --lightBlue3: #CEDCEB;
+    --blue1: #9dbee3;
+    --blue2: #A4C4F0;
+    --blue3: #6a98c6;
+    --blue4: #4F7396;
+    --red1: #ead1dc;
+    --red2: #d7a1ba;
+    --red3: #FFBFDE;
+    --red4: #964F73;
+    --green1: #D1FEB6;
+    --green2: #b4e97e;
+    --green3: #93be66;
+}
+
+body{
+    min-height: 100vh;
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.flexContainer{
+    background-color: var(--lightBlue1);
+    min-height: 100vh;
+    align-content: center;
+    text-align: center;
+}
+
+button{
+    font-family: 'Poppins', sans-serif;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+.formBox{
+    width: 288px;
+    display: inline-flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 20px;
+    gap: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 4px 0px rgba(0,0,0,25%);
+}
+
+.formBox_header{
+    font-family: inherit;
+    border-bottom: solid 1px var(--lightBlue1);
+    padding-top: 13px;
+    padding-bottom: 13px;
+}
+
+.formBox_tittle{
+    font-weight: 500;
+    font-size: 25px;
+    line-height: 24px;
+}
+
+.formBox_switch{
+    display: flex;
+    border-radius: 12px;
+    background: linear-gradient(to right,  var(--lightBlue1) 0%, var(--lightBlue1) 25%, #ffff 25%,#ffff 50%, var(--lightBlue1) 50%, var(--lightBlue1) 75%, white 75% );
+    background-size: 200%,200%;
+    background-position: 0% 100%;
+    transition: background-position 0.3s ease-in-out;
+}
+
+
+.formBox_mode{
+    padding: 11px 9px;
+    flex: 1;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 21px;
+    background-color: transparent;
+    border: solid 1px var(--lightBlue1);
+}
+
+
+.formBox_mode--left{
+    border-top-left-radius: 12px;
+    border-end-start-radius: 12px;
+}
+
+.formBox_mode--right{
+    border-top-right-radius: 12px;
+    border-end-end-radius: 12px;
+}
+
+.formBox_switch--right{
+    background-position: -50% 100%;
+}
+
+.formBox_button{
+    background-color: var(--blue2);
+    padding: 8px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+}
+
+.formBox_form{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.formBox_input{
+    display: flex;
+    align-items: center; 
+    padding: 8px 12px;
+    gap: 12px;
+}
+
+.formBox_inputText{
+    font-family: "Work Sans", sans-serif;
+    width: 100%;
+    color: var(--blue1);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    display: flex;
+    align-items: center;
+    border: none;
+    outline: none;
+    padding: 0.5px 5px;
+    border-bottom: solid 1px var(--lightBlue1);
+    border-radius: 5px;
+}
+
+
+.formBox_icon{
+    width: 23px;
+}
+
+.svgJoiner{
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formBox_footer{
+    padding: 0px 5px;
+}
+
+.formBox_link{
+    font-family: "Work Sans", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--blue1);
+}
+
+button:hover{
+    cursor: pointer;
+}
+
+.formBox_link{
+    cursor: pointer;
+}

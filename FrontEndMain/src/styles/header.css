@@ -1,0 +1,57 @@
+.headerBox{
+    background-color: var(--lightBlue1);
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 40px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 65px;
+}
+
+.contentBlock{
+    height: calc(100vh - 65px - 71px);
+    width: 100vw;
+    position: fixed;
+    top: 65px;
+}
+
+.headerBox_tittle{
+    font-family: "Work Sans", sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
+    align-content: center;
+}
+
+.headerBox_nav{
+    display: flex;
+    gap: 36px;
+    justify-content: space-between;
+    
+}
+
+.headerBox_link{
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    align-content: center;
+    text-decoration: none;
+    color: black;
+}
+
+.headerBox_link--active{
+    text-decoration: underline;
+}
+
+.headerBox_icon{
+    background-color: var(--lightBlue2);
+    border-radius: 12px;
+    max-width: 480px;
+    padding: 10px 10px;
+}
+
+.headerBox_icon:hover{
+    cursor: pointer;
+}

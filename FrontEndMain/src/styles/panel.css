@@ -1,0 +1,65 @@
+.panelBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: content-box;
+    height: 100%;
+}
+
+.panelBox_tittle{
+    display: block;
+    width: 962px;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 40px;
+    padding: 16px;
+}
+
+.panelBox_grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 45px 30px;
+    padding: 20px 31px;
+    margin-bottom: 80px;
+}
+
+.panelBox_itemCard{
+    width: 280px;
+    height: 160px;
+    position: relative;
+    border-radius: 8px;
+    background-color: var(--red1);
+    padding: 20px;
+    z-index: -10;
+}
+
+.panelBox_itemCard--green{
+    background-color: var(--green1);
+}
+
+.panelBox_itemCard--blue{
+    background-color: var(--lightBlue3);     
+}
+
+.panelBox_info{
+    font-family: "Work Sans", sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.panelBox_data{
+    font-family: "Work Sans", sans-serif;
+    font-weight: 500;
+    font-size: 64px;
+    line-height: 24px;
+    padding: 36px 16px;
+}
+
+.panelBox_icon{
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+}

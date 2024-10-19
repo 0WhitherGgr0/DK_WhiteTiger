@@ -1,0 +1,20 @@
+.footerBox{
+    background-color: var(--lightBlue1);
+    display: flex;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 40px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+.footerBox_text{
+    padding: 13px 0;
+    font-family: "Work Sans", sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--blue4);
+}

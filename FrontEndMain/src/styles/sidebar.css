@@ -1,0 +1,67 @@
+.sideBarBlock{
+    width: 336px;
+    height: 100%;
+    padding: 36px 16px 56px 40px;
+    box-sizing: border-box;
+}
+
+.sideBarBlock_tittle{
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    margin-bottom: 16px;
+}
+
+.sideBarBlock_info{
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+}
+
+.sideBarBlock_list{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sideBarBlock_item{
+    border-radius: 12px;
+    width: 100%;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: black;
+}
+
+.sideBarBlock_item--active{
+    background-color: var(--lightBlue2);
+}
+
+.sideBarBlock_icon{
+    width: 24px;
+    height: 24px;
+    align-content: center;
+}
+
+.vehiculosBlock_tableOptions{
+    display: flex;
+    gap: 25px;
+}
+
+.vehiculosBlock_tableIcon{
+    text-align: right;
+    width: 32px;
+    height: 32px;
+}
+
+.vehiculosBlock_iconJoiner{
+    position: relative;
+}
+
+.vehiculosBlock_iconJoiner .vehiculosBlock_tableIcon:nth-child(2){
+    position: absolute;
+    top: 0;
+    left: 0;
+}
