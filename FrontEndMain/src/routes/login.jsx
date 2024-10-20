@@ -16,7 +16,7 @@ export default function Login(){
                 </div>
                 <div className={`formBox_switch ${isLogin === false ? 'formBox_switch--right' : ''}`}>
                     <button onClick={()=>{setIsLogin(true)}} className="formBox_mode formBox_mode--left formBox_mode--active">
-                        INGRESAR
+                        INGRESAR1
                     </button>
                     <button onClick={()=>{setIsLogin(false)}} className="formBox_mode formBox_mode--right">
                         REGISTRAR
