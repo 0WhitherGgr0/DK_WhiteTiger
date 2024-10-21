@@ -1,0 +1,74 @@
+.odenesBlock{
+    display: inline;
+    flex: 1;
+    position: fixed;
+    left: 200px;
+    top: 80px;
+    right: 200px;
+    padding-top: 0px;
+    padding-right: 24px;
+}
+
+.odenesBlock_tittle{
+    padding: 16px;
+}
+
+.odenesBlock_tittle h2{
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 20px;
+}
+
+.odenesBlock_options{
+    padding: 12px 16px;
+    display: flex;
+    justify-content: right;
+}
+
+.odenesBlock_button{
+    background-color: var(--blue3);
+    color: white;
+    font-family: "Work Sans", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 21px;
+    text-align: center;
+    border: none;
+    padding: 10px 16px;
+    display: flex;
+    border-radius: 12px;
+    gap: 8px;
+    align-items: center;
+}
+
+.odenesBlock_icon{
+    align-content: center;
+    width: 20px;
+    height: 20px;
+    padding-top: 2px;
+}
+
+.odenesBlock_tableStates{
+    display: flex;
+    gap: 12.5px;
+}
+
+.odenesBlock_tableState{
+    border-radius: 12px;
+    padding: 5.5px 21px;
+    background-color: var(--green2);
+    flex: 1;
+    text-align: center;
+    font-family: "Work Sans", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+}
+
+.odenesBlock_tableState--Activo{
+    background-color: var(--blue1);
+}
+
+.odenesBlock_tableState--Inactivo{
+    background-color: #E2E2E4;
+}

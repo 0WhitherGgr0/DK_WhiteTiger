@@ -1,2 +1,4 @@
 /Flask-pruebas/.env
 *.pyc
+FrontEndMain/package-lock.json
+FrontEndMain/vite.config.js
