@@ -7,14 +7,17 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Login from "./routes/login";
-import Dashboard from "./routes/dashboard";
-import Panel from "./routes/panel";
-import Ordenes from "./routes/ordenes";
-import Flotas from "./routes/flotas";
-import Rutas from "./routes/rutas";
-import Vehiculos from "./routes/vehiculos";
-import Conductores from "./routes/conductores";
-import RutasVista from "./routes/rutasVista";
+import Dashboard from "./routes/dashboard/dashboard";
+import Panel from "./routes/dashboard/panel/panel";
+import Ordenes from "./routes/dashboard/ordenes/ordenes"
+import Flotas from "./routes/dashboard/flotas/flotas";
+import Rutas from "./routes/dashboard/rutas/rutas"
+import Vehiculos from "./routes/dashboard/flotas/vehiculos";
+import Conductores from "./routes/dashboard/flotas/conductores";
+import RutasVista from "./routes/dashboard/flotas/rutasVista"
+import FormVehiculo from "./routes/dashboard/flotas/formVehiculo";
+
+import { action as vehicleCreate } from "./routes/dashboard/flotas/formVehiculo";
 
 const router = createBrowserRouter([
   {
@@ -43,7 +46,7 @@ const router = createBrowserRouter([
             element: <Flotas/>,
             children: [
               {
-                index:true,
+                path: "/dashboard/flotas/vehiculos",
                 element: <Vehiculos/>
               },
               {
@@ -53,6 +56,11 @@ const router = createBrowserRouter([
               {
                 path: "/dashboard/flotas/rutas",
                 element: <RutasVista/>
+              },
+              {
+                path: "/dashboard/flotas/vehiculos/nuevoVehiculo",
+                element: <FormVehiculo/>,
+                action: vehicleCreate
               }
             ]
           },
