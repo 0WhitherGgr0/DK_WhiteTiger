@@ -1,7 +1,23 @@
 import "../../../styles/vehiculos.css"
 import plusSVG from "../../../assets/plus.svg"
 import TableCrud from "../../../components/tableCrud"
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLoaderData } from 'react-router-dom';
+
+const API_URL = 'http://127.0.0.1:5000';
+export async function loadVehicles() {
+    console.log("Trayendo datos")
+    try {
+        const response = await fetch(`${API_URL}/`);
+        if (!response.ok) {
+          throw new Error('Error al obtener los items');
+        }
+        const data = await response.json();
+        return {data};
+    } catch (error) {
+        console.error('Error al obtener los items:', error);
+    }
+    return {};
+}
 
 const heads = [
     {
@@ -48,6 +64,8 @@ for(let i =0;i<2;i++){
 
 export default function Vehiculos(){
     const navigate = useNavigate();
+    const {data} = useLoaderData();
+    console.log(data);
     return (
         <div className="vehiculosBlock">
             <div className="vehiculosBlock_tittle">

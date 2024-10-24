@@ -8,9 +8,42 @@ import routeSVG from "../../../assets/ubication.svg"
 import PanelItem from '../../../components/panelItem'
 
 export default function Panel(){
+
+    const handleADA = async function(){
+        console.log("asdasdad")
+        const API_URL = 'http://127.0.0.1:5000'; // URL del API
+        try {
+            const response = await fetch(`${API_URL}/add`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+              },
+              body: JSON.stringify({
+                lt: "2",
+                ln: "2",
+                fecha: "3",
+                nombre: "4",
+              }),
+            });
+          
+            if (!response.ok) {
+              const errorData = await response.json();
+              console.error('Error al crear el item pipipi:', errorData.error);
+              return;
+            }
+          
+            const newItem = await response.json();
+          }  catch (error) {
+            console.error('Error al crear el item:', error);
+          }
+    }
+   
+
+
     return (
         <div className="panelBox">
-            <h2 className="panelBox_tittle">Panel</h2>
+            <h2 onClick={handleADA}className="panelBox_tittle">Panel</h2>
             <div className="panelBox_grid">
                 <PanelItem info="Clientes satisfechos" data="80" imgSrc={usersSVG}/>
                 <PanelItem info="Órdenes entregadas"   color="green" data="120" imgSrc={requestSVG}/>

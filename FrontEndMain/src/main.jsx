@@ -18,6 +18,7 @@ import RutasVista from "./routes/dashboard/flotas/rutasVista"
 import FormVehiculo from "./routes/dashboard/flotas/formVehiculo";
 
 import { action as vehicleCreate } from "./routes/dashboard/flotas/formVehiculo";
+import { loadVehicles } from "./routes/dashboard/flotas/vehiculos";
 
 const router = createBrowserRouter([
   {
@@ -47,7 +48,8 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "/dashboard/flotas/vehiculos",
-                element: <Vehiculos/>
+                element: <Vehiculos/>,
+                loader: loadVehicles
               },
               {
                 path: "/dashboard/flotas/conductores",

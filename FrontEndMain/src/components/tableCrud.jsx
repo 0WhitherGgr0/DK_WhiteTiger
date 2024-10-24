@@ -46,7 +46,6 @@ export default function TableCrud({heads, rows}){
     function fixedHeaderContent() {
         return (
           <TableRow>
-            {console.log(12)}
             {heads.map((head) =>(
                 <StyledTableCell key={head.id} style={{ minWidth: head.minWidth }}>
                     {head.id}
