@@ -1,16 +1,56 @@
-import '../styles/reset.css'
-import '../styles/login.css'
-import arrobaSVG from "../assets/arroba.svg"
-import lockPart1SVG from "../assets/lock_1.svg"
-import lockPart2SVG from "../assets/lock_2.svg"
-import userSVG from "../assets/user.svg"
-import { useState } from 'react'
+import '../styles/reset.css';
+import '../styles/login.css';
+import arrobaSVG from "../assets/arroba.svg";
+import lockPart1SVG from "../assets/lock_1.svg";
+import lockPart2SVG from "../assets/lock_2.svg";
+import userSVG from "../assets/user.svg";
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-export default function Login(){
-
-    const [isLogin , setIsLogin] = useState(true);
+export default function Login() {
+    const { login } = useAuth();
+    const [isLogin, setIsLogin] = useState(true);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState(''); // Solo necesario si se usa en la vista de registro
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
+
+    const handleSubmit = async () => {
+        try {
+            const endpoint = isLogin
+                ? 'http://127.0.0.1:5000/login'
+                : 'http://localhost:5000/api/register';
+
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const { token, role } = data.user;
+
+                if (!role || !token) {
+                    throw new Error('El rol o el token no están definidos');
+                }
+
+                login(token, role); // Guarda el token y el rol en el contexto
+                navigate('/dashboard');
+            } else {
+                const errorData = await response.json();
+                setError(errorData.message || 'Error en la autenticación');
+            }
+        } catch (error) {
+            setError('No se pudo conectar con el servidor');
+            console.error('Error en login:', error);
+        }
+    };
+
 
     return (
         <div className='flexContainer'>
@@ -18,11 +58,11 @@ export default function Login(){
                 <div className="formBox_header">
                     <h2 className="formBox_tittle">RoadMap Pro</h2>
                 </div>
-                <div className={`formBox_switch ${isLogin === false ? 'formBox_switch--right' : ''}`}>
-                    <button onClick={()=>{setIsLogin(true)}} className="formBox_mode formBox_mode--left formBox_mode--active">
+                <div className={`formBox_switch ${!isLogin ? 'formBox_switch--right' : ''}`}>
+                    <button onClick={() => setIsLogin(true)} className={`formBox_mode formBox_mode--left ${isLogin ? 'formBox_mode--active' : ''}`}>
                         INGRESAR
                     </button>
-                    <button onClick={()=>{setIsLogin(false)}} className="formBox_mode formBox_mode--right">
+                    <button onClick={() => setIsLogin(false)} className={`formBox_mode formBox_mode--right ${!isLogin ? 'formBox_mode--active' : ''}`}>
                         REGISTRAR
                     </button>
                 </div>
@@ -30,39 +70,55 @@ export default function Login(){
                     {!isLogin &&
                         <div className="formBox_input">
                             <div className="formBox_icon">
-                                <img src={userSVG} alt="" />  
+                                <img src={userSVG} alt="User icon" />
                             </div>
-                            <input type="text" className="formBox_inputText" placeholder='Nombres'/>
+                            <input
+                                type="text"
+                                className="formBox_inputText"
+                                placeholder='Nombres'
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
                         </div>
                     }
                     <div className="formBox_input">
                         <div className="formBox_icon">
-                            <img src={arrobaSVG} alt="" />
+                            <img src={arrobaSVG} alt="Email icon" />
                         </div>
-                        <input type="text" className="formBox_inputText" placeholder='Correo'/>
+                        <input
+                            type="email"
+                            className="formBox_inputText"
+                            placeholder='Correo'
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
                     </div>
                     <div className="formBox_input">
                         <div className="formBox_icon">
                             <div className="svgJoiner">
-                                <img src={lockPart2SVG} alt="" />
-                                <img style={{marginTop: "-4px"}} src={lockPart1SVG} alt="" />
+                                <img src={lockPart2SVG} alt="Lock icon part 2" />
+                                <img style={{ marginTop: "-4px" }} src={lockPart1SVG} alt="Lock icon part 1" />
                             </div>
                         </div>
-                        <input type="text" className="formBox_inputText" placeholder='Contraseña'/>
-                    </div>    
+                        <input
+                            type="password"
+                            className="formBox_inputText"
+                            placeholder='Contraseña'
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
                 </div>
-                <button className="formBox_button" onClick={()=>{
-                    navigate("/dashboard");
-                }}>
+                {error && <div className="formBox_error">{error}</div>}
+                <button className="formBox_button" onClick={handleSubmit}>
                     {isLogin ? "Ingresar" : "Registrarse"}
                 </button>
                 <div className="formBox_footer">
-                    <p onClick={()=>{setIsLogin(false)}} className="formBox_link">
+                    <p onClick={() => setIsLogin(false)} className="formBox_link">
                         ¿Aún no tienes una cuenta?
                     </p>
                 </div>
             </div>
         </div>
-    )
-
+    );
 }
