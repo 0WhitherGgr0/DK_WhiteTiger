@@ -4,7 +4,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { AuthProvider } from './context/AuthContext';  // Asegúrate de importar correctamente el AuthProvider
+import { AuthProvider } from './context/AuthContext';  
 import Root from "./routes/root";
 import ErrorPage from "./routes/error-page";
 import Login from "./routes/login";
@@ -21,7 +21,6 @@ import PrivateRoute from "./routes/PrivateRoute";
 import { action as vehicleCreate } from "./routes/dashboard/flotas/formVehiculo";
 import RoleRoute from "./routes/PrivateRoute";
 
-// main.jsx
 const router = createBrowserRouter([
   {
     path: "/",
@@ -35,7 +34,7 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: (
-          <PrivateRoute>
+          <PrivateRoute >
             <Dashboard />
           </PrivateRoute>
         ),
@@ -47,7 +46,7 @@ const router = createBrowserRouter([
           {
             path: "/dashboard/ordenes",
             element: (
-              <PrivateRoute allowedRoles={['admin']}>
+              <PrivateRoute allowedRoles={['admin', 'conductor']}>
                 <Ordenes />
               </PrivateRoute>
             )
@@ -79,7 +78,7 @@ const router = createBrowserRouter([
               {
                 path: "/dashboard/flotas/rutas",
                 element: (
-                  <PrivateRoute allowedRoles={['admin']}>
+                  <PrivateRoute allowedRoles={['admin', 'conductores']}>
                     <RutasVista />
                   </PrivateRoute>
                 )
