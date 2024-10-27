@@ -24,88 +24,82 @@ import RoleRoute from "./routes/PrivateRoute";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
-    errorElement: <ErrorPage />,
+    element: <Login />,  
+    errorElement: <ErrorPage />
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <Dashboard />
+      </PrivateRoute>
+    ),
     children: [
       {
-        path: "/login",
-        element: <Login />
+        index: true,
+        element: <Panel/>
       },
       {
-        path: "/dashboard",
+        path: "/dashboard/ordenes",
         element: (
-          <PrivateRoute >
-            <Dashboard />
+          <PrivateRoute allowedRoles={['admin', 'conductor']}>
+            <Ordenes />
+          </PrivateRoute>
+        )
+      },
+      {
+        path: "/dashboard/flotas",
+        element: (
+          <PrivateRoute allowedRoles={['admin']}>
+            <Flotas />
           </PrivateRoute>
         ),
         children: [
           {
-            index: true,
-            element: <Panel/>
-          },
-          {
-            path: "/dashboard/ordenes",
-            element: (
-              <PrivateRoute allowedRoles={['admin', 'conductor']}>
-                <Ordenes />
-              </PrivateRoute>
-            )
-          },
-          {
-            path: "/dashboard/flotas",
+            path: "/dashboard/flotas/vehiculos",
             element: (
               <PrivateRoute allowedRoles={['admin']}>
-                <Flotas />
-              </PrivateRoute>
-            ),
-            children: [
-              {
-                path: "/dashboard/flotas/vehiculos",
-                element: (
-                  <PrivateRoute allowedRoles={['admin']}>
-                    <Vehiculos />
-                  </PrivateRoute>
-                )
-              },
-              {
-                path: "/dashboard/flotas/conductores",
-                element: (
-                  <PrivateRoute allowedRoles={['admin']}>
-                    <Conductores />
-                  </PrivateRoute>
-                )
-              },
-              {
-                path: "/dashboard/flotas/rutas",
-                element: (
-                  <PrivateRoute allowedRoles={['admin', 'conductores']}>
-                    <RutasVista />
-                  </PrivateRoute>
-                )
-              },
-              {
-                path: "/dashboard/flotas/vehiculos/nuevoVehiculo",
-                element: (
-                  <PrivateRoute allowedRoles={['admin']}>
-                    <FormVehiculo />
-                  </PrivateRoute>
-                ),
-                action: vehicleCreate
-              }
-            ]
-          },
-          {
-            path: "/dashboard/rutas",
-            element: (
-              <PrivateRoute allowedRoles={['admin', 'conductor']}>
-                <Rutas />
+                <Vehiculos />
               </PrivateRoute>
             )
+          },
+          {
+            path: "/dashboard/flotas/conductores",
+            element: (
+              <PrivateRoute allowedRoles={['admin']}>
+                <Conductores />
+              </PrivateRoute>
+            )
+          },
+          {
+            path: "/dashboard/flotas/rutas",
+            element: (
+              <PrivateRoute allowedRoles={['admin']}>
+                <RutasVista />
+              </PrivateRoute>
+            )
+          },
+          {
+            path: "/dashboard/flotas/vehiculos/nuevoVehiculo",
+            element: (
+              <PrivateRoute allowedRoles={['admin']}>
+                <FormVehiculo />
+              </PrivateRoute>
+            ),
+            action: vehicleCreate
           }
         ]
+      },
+      {
+        path: "/dashboard/rutas",
+        element: (
+          <PrivateRoute allowedRoles={['admin', 'conductor']}>
+            <Rutas />
+          </PrivateRoute>
+        )
       }
-    ],
-  },
+    ]
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

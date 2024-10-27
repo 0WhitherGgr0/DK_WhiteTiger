@@ -4,17 +4,15 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const PrivateRoute = ({ children, allowedRoles }) => {
-    const { isAuthenticated, getRole } = useAuth();
+    const { isAuthenticated, role } = useAuth();
 
     if (!isAuthenticated()) {
         return <Navigate to="/login" />;
     }
 
-    const userRole = getRole();
-
-    // Si `allowedRoles` está definido y el rol del usuario no está en la lista, redirige.
-    if (allowedRoles && !allowedRoles.includes(userRole)) {
-        return <Navigate to="/dashboard" />; // Redirige a una página permitida si no tiene acceso
+    if (allowedRoles && !allowedRoles.includes(role)) {
+        alert('No tienes permisos para acceder a esta ruta');
+        return <Navigate to="/dashboard" />; // Redirige si el rol no es permitido
     }
 
     return children;
