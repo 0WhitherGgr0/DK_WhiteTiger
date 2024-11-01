@@ -33,7 +33,7 @@ export default function Login() {
 
     const getSaltFromBackend = async () => {
         try {
-            const response = await fetch('http://localhost:5000/generate-key');
+            const response = await fetch('http://127.0.0.1:8000/api/v1/generate-key');
             const data = await response.json();
             setSalt(data.salt);  // Guardar el salt en el estado
         } catch (error) {
@@ -48,18 +48,18 @@ export default function Login() {
                 setError("Error: No se pudo obtener el salt");
                 return;
             }
-
+    
             const endpoint = isLogin
-                ? 'http://localhost:5000/login'
-                : 'http://localhost:5000/register';
-
+                ? 'http://127.0.0.1:8000/api/v1/login/'
+                : 'http://127.0.0.1:8000/api/v1/register/';
+    
             // Encriptar el password antes de enviarlo al backend usando el salt almacenado
             const encryptedPassword = await encryptData({ password }, salt);
-            console.log("Password encriptado:", encryptedPassword)
+            console.log("Password encriptado:", encryptedPassword);
             const body = isLogin
                 ? { email, password: encryptedPassword }
                 : { name, email, password: encryptedPassword };
-
+    
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
@@ -68,15 +68,15 @@ export default function Login() {
                 body: JSON.stringify(body),
                 mode: 'cors',
             });
-
+    
             if (response.ok) {
                 const data = await response.json();
                 if (isLogin) {
-                    const { role } = data.user;
-                    if (!role) {
+                    const { rol } = data.user;  // Cambiado de 'role' a 'rol'
+                    if (!rol) {
                         throw new Error('El rol no está definido');
                     }
-                    login(role); 
+                    login(rol);  // Pasa el rol al contexto de autenticación
                     navigate('/dashboard');
                 } else {
                     setSuccessMessage(data.message || 'Registro exitoso');
@@ -93,6 +93,7 @@ export default function Login() {
             console.error('Error en login:', error);
         }
     };
+    
 
 
     return (

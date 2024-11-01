@@ -45,14 +45,14 @@ class Linea(models.Model):
 class Usuario(models.Model):
     usuario_id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
-    contacto = models.CharField(max_length=100)
-    region = models.CharField(max_length=50)
+    contacto = models.CharField(max_length=100, unique=True)
+    region = models.CharField(max_length=50, default="Desconocida")
     contraseña = models.CharField(max_length=100)
-    rol = models.CharField(max_length=50)
-    tipo_documento = models.CharField(max_length=50)
-    documento = models.CharField(max_length=50)
-    fecha_nacimiento = models.DateField()
-    telefono = models.CharField(max_length=15)
+    rol = models.CharField(max_length=50, default="conductor")
+    tipo_documento = models.CharField(max_length=50, default="DNI")
+    documento = models.CharField(max_length=50, default="00000000")
+    fecha_nacimiento = models.DateField(null=True, blank=True, default="2000-01-01")
+    telefono = models.CharField(max_length=15, default="0000000000")
 
 class Vehiculo(models.Model):
     placa = models.CharField(max_length=10, primary_key=True)

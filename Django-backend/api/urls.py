@@ -19,4 +19,7 @@ router.register(r'envios', views.EnvioViewSet)
 # Incluir las rutas registradas en urlpatterns
 urlpatterns = [
     path('', include(router.urls)),
+    path('register/', views.register, name='register'),
+    path('login/', views.login, name='login'),
+    path('generate-key/', views.generate_key_endpoint, name='generate_key')
 ]

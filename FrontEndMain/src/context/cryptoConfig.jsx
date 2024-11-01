@@ -3,7 +3,7 @@ import CryptoJS from 'crypto-js';
 const secretKey = "elSyDaMeConsume";
 
 async function getSaltFromBackend() {
-    const response = await fetch('http://localhost:5000/generate-key');
+    const response = await fetch('http://127.0.0.1:8000/api/v1/generate-key');
     const data = await response.json();
     return data.salt;
 }
