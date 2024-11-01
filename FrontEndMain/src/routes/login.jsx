@@ -68,7 +68,7 @@ export default function Login() {
                 body: JSON.stringify(body),
                 mode: 'cors',
             });
-    
+            console.log("Respuesta del backend:", response);
             if (response.ok) {
                 const data = await response.json();
                 if (isLogin) {

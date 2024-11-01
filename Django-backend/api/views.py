@@ -16,6 +16,7 @@ import bcrypt
 import json
 from .models import Usuario
 from django.db.utils import IntegrityError
+
 SECRET_KEY = os.getenv('SECRET_KEY', 'elSyDaMeConsume')
 
 def generate_salt_and_key():
@@ -34,7 +35,12 @@ def decrypt_data(encrypted_data):
         key = PBKDF2(SECRET_KEY.encode('utf-8'), salt, dkLen=32, count=1000, hmac_hash_module=SHA256)
 
         hmac_calculated = hmac.new(key, ciphertext_base64.encode(), SHA256).hexdigest()
-
+        print("Salt (hex):", salt.hex())
+        print("IV (hex):", iv.hex())
+        print("Ciphertext (Base64):", ciphertext_base64)
+        print("HMAC calculado:", hmac_calculated)
+        print("HMAC proporcionado:", hmac_provided)
+        
         if hmac_calculated != hmac_provided:
             raise ValueError("HMAC no coincide. Los datos pueden estar comprometidos.")
 
