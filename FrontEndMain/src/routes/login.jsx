@@ -4,10 +4,12 @@ import arrobaSVG from "../assets/arroba.svg";
 import lockPart1SVG from "../assets/lock_1.svg";
 import lockPart2SVG from "../assets/lock_2.svg";
 import userSVG from "../assets/user.svg";
-import { useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useEffect } from 'react';
+import { encryptData } from '../context/cryptoConfig';
+
+import React, { useState, useEffect } from 'react';
 
 export default function Login() {
     const { login, isAuthenticated } = useAuth();
@@ -17,46 +19,66 @@ export default function Login() {
     const [name, setName] = useState('');
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
+    const [salt, setSalt] = useState(null);  // Nuevo estado para el salt
     const navigate = useNavigate();
 
     useEffect(() => {
         if (isAuthenticated()) {
             navigate('/dashboard');
+        } else {
+            // Obtener el salt solo una vez cuando se carga el componente
+            getSaltFromBackend();
         }
     }, [isAuthenticated, navigate]);
 
+    const getSaltFromBackend = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/generate-key');
+            const data = await response.json();
+            setSalt(data.salt);  // Guardar el salt en el estado
+        } catch (error) {
+            console.error("Error al obtener el salt del backend:", error);
+            setError("No se pudo conectar con el servidor");
+        }
+    };
+
     const handleSubmit = async () => {
         try {
+            if (!salt) {
+                setError("Error: No se pudo obtener el salt");
+                return;
+            }
+
             const endpoint = isLogin
                 ? 'http://localhost:5000/login'
                 : 'http://localhost:5000/register';
 
+            // Encriptar el password antes de enviarlo al backend usando el salt almacenado
+            const encryptedPassword = await encryptData({ password }, salt);
+            console.log("Password encriptado:", encryptedPassword)
             const body = isLogin
-                ? { email, password }
-                : { name, email, password };
+                ? { email, password: encryptedPassword }
+                : { name, email, password: encryptedPassword };
 
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(body)
+                body: JSON.stringify(body),
+                mode: 'cors',
             });
 
             if (response.ok) {
                 const data = await response.json();
-
                 if (isLogin) {
                     const { role } = data.user;
-
                     if (!role) {
                         throw new Error('El rol no está definido');
                     }
-
-                    login(role); // Guarda solo el rol en el contexto
+                    login(role); 
                     navigate('/dashboard');
                 } else {
-                    // Muestra el mensaje de éxito para el registro
                     setSuccessMessage(data.message || 'Registro exitoso');
                     setError(null);
                 }
@@ -71,6 +93,7 @@ export default function Login() {
             console.error('Error en login:', error);
         }
     };
+
 
     return (
         <div className='flexContainer'>
