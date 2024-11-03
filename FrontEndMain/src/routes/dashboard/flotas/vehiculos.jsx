@@ -9,15 +9,17 @@ export async function loadVehicles() {
     try {
         const response = await fetch(`${API_URL}/`);
         if (!response.ok) {
-          throw new Error('Error al obtener los items');
+            throw new Error('Error al obtener los items');
         }
         const data = await response.json();
-        return {data};
+        return { data };
     } catch (error) {
         console.error('Error al obtener los items:', error);
+        // Devuelve un objeto con data como array vacío en caso de error
+        return { data: [] };
     }
-    return {};
 }
+
 
 const heads = [
     {
@@ -64,7 +66,8 @@ for(let i =0;i<2;i++){
 
 export default function Vehiculos(){
     const navigate = useNavigate();
-    const {data} = useLoaderData();
+    const loaderData = useLoaderData();
+    const data = loaderData?.data || []; // Si data es undefined, usa un array vacío
     console.log(data);
     return (
         <div className="vehiculosBlock">
@@ -72,7 +75,7 @@ export default function Vehiculos(){
                 <h2>Vehículos</h2>
             </div>
             <div className="vehiculosBlock_options">
-                <button className="vehiculosBlock_button" onClick={()=>{
+                <button className="vehiculosBlock_button" onClick={() => {
                     navigate("/dashboard/flotas/vehiculos/nuevoVehiculo");
                 }}>
                     <div className="vehiculosBlock_icon">
@@ -81,7 +84,7 @@ export default function Vehiculos(){
                     Agregar Vehiculo
                 </button>
             </div>
-            <TableCrud heads={heads} rows={rows}/>
+            <TableCrud heads={heads} rows={rows} />
         </div>
-    )
+    );
 }
