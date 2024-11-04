@@ -4,7 +4,7 @@ import arrobaSVG from "../assets/arroba.svg";
 import lockPart1SVG from "../assets/lock_1.svg";
 import lockPart2SVG from "../assets/lock_2.svg";
 import userSVG from "../assets/user.svg";
-
+import { useUser } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { encryptData } from '../context/cryptoConfig';
@@ -19,7 +19,9 @@ export default function Login() {
     const [name, setName] = useState('');
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
-    const [salt, setSalt] = useState(null);  // Nuevo estado para el salt
+    const [salt, setSalt] = useState(null); 
+    const { setUserId } = useUser();
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -72,11 +74,14 @@ export default function Login() {
             if (response.ok) {
                 const data = await response.json();
                 if (isLogin) {
-                    const { rol } = data.user;  // Cambiado de 'role' a 'rol'
+                    const { rol } = data.user;  
                     if (!rol) {
                         throw new Error('El rol no está definido');
                     }
-                    login(rol);  // Pasa el rol al contexto de autenticación
+                    login(rol);
+                    const {id} = data.user;
+                    setUserId(id);
+                    console.log("Usuario logueado:", data.user);
                     navigate('/dashboard');
                 } else {
                     setSuccessMessage(data.message || 'Registro exitoso');

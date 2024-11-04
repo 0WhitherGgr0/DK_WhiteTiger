@@ -21,5 +21,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('register/', views.register, name='register'),
     path('login/', views.login, name='login'),
-    path('generate-key/', views.generate_key_endpoint, name='generate_key')
+    path('generate-key/', views.generate_key_endpoint, name='generate_key'),
+    path('conductores/', views.create_conductor, name='create_conductor'),
+    path('vehiculos/', views.create_vehiculo, name='create_vehiculo'),
 ]

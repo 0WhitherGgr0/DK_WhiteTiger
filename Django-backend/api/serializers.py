@@ -1,5 +1,9 @@
 from rest_framework import serializers
 from .models import Cliente, Producto, Ubicacion, Pedido, Linea, Usuario, Vehiculo, Conductor, Recorrido, Envio
+from rest_framework import serializers
+from .models import Conductor
+
+
 
 class ClienteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,12 +38,12 @@ class UsuarioSerializer(serializers.ModelSerializer):
 class VehiculoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehiculo
-        fields = '__all__'
+        fields = ['placa', 'soat', 'marca', 'modelo', 'color', 'registro', 'año_fabricacion', 'capacidad', 'estado']
 
 class ConductorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conductor
-        fields = '__all__'
+        fields = ['usuario', 'vehiculo', 'breve', 'estado']  
 
 class RecorridoSerializer(serializers.ModelSerializer):
     class Meta:

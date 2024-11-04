@@ -1,74 +1,76 @@
-import '../../styles/select.css'
-import React, { forwardRef } from 'react'
-import SelectButton from './selectButton'
-import SelectContent from './selectContent'
-import { useState, useEffect, useRef} from 'react'
-import SelectItem from './selectItem'
+import '../../styles/select.css';
+import React, { useState, useEffect, useRef } from 'react';
+import SelectButton from './selectButton';
+import SelectContent from './selectContent';
+import SelectItem from './selectItem';
 
-
-
-const SelectInput = ({name, placeholder, options}) => {
-
+const SelectInput = ({ name, placeholder, options }) => {
     const [open, setOpen] = useState(false);
-    const [currInfo, setCurrInfo] = useState({info: placeholder, id: options[0].label + options[0].value});
+    const [currInfo, setCurrInfo] = useState({ info: placeholder, id: options[0]?.value || "" });
     const selectRef = useRef();
     const refsInputs = useRef(new Map());
 
-    useEffect(()=>{
-        const handlerCancelation = (event) =>{
-            if(selectRef.current &&
-                !selectRef.current.contains(event.target)
-            ){
+    useEffect(() => {
+        const handlerCancelation = (event) => {
+            if (selectRef.current && !selectRef.current.contains(event.target)) {
                 setOpen(false);
             }
-        }
-        document.addEventListener("click",handlerCancelation);
+        };
+        document.addEventListener("click", handlerCancelation);
 
-        return (()=>document.removeEventListener("click",handlerCancelation))
+        return () => document.removeEventListener("click", handlerCancelation);
+    }, [selectRef]);
 
-    },[selectRef])
-
-    const activateSelect = function(){
+    const activateSelect = () => {
         setOpen((prev) => !prev);
-    }
+    };
 
-    const setRef = function(key, element){
+    const setRef = (key, element) => {
         if (element) {
-            refsInputs.current.set(key, element); 
+            refsInputs.current.set(key, element);
         } else {
-            refsInputs.current.delete(key); 
+            refsInputs.current.delete(key);
         }
     };
 
     const handleFocus = (key) => {
-        if(refsInputs.current){
+        if (refsInputs.current) {
             const element = refsInputs.current.get(key);
             if (element) {
                 element.checked = true;
                 element.focus();
             }
-        }   
+        }
     };
 
-    const changeMainInfo = function(label,id){
-        setCurrInfo({info: label, id: id})
-        activateSelect();    
-    }
+    const changeMainInfo = (label, value) => {
+        setCurrInfo({ info: label, id: value });
+        activateSelect();
+    };
 
-  return (
-    <div className='custom-select' ref={selectRef}>
-        <SelectButton info = {currInfo} action = {()=>{handleFocus(currInfo.id);activateSelect();}}>
-        </SelectButton>
-        <SelectContent isOpen = {open} width = {selectRef.current ? selectRef.current.offsetWidth: 0}>
-            {options.map((option) =>{
-                let id = option.label + option.value;
-                return <SelectItem isOpen = {open} name = {name} data = {option}
-                  ref = {(element) => setRef(id,element)} 
-                    key = {id} changeInfo = {()=>changeMainInfo(option.label,id)}/>
-            })}
-        </SelectContent>
-    </div>
-  )
-}
+    return (
+        <div className='custom-select' ref={selectRef}>
+            <input type="hidden" name={name} value={currInfo.id} />
 
-export default SelectInput
+            <SelectButton info={currInfo} action={() => { handleFocus(currInfo.id); activateSelect(); }}>
+            </SelectButton>
+            <SelectContent isOpen={open} width={selectRef.current ? selectRef.current.offsetWidth : 0}>
+                {options.map((option) => {
+                    const id = option.value || option.label; 
+                    return (
+                        <SelectItem
+                            isOpen={open}
+                            name={name}
+                            data={option}
+                            ref={(element) => setRef(id, element)}
+                            key={id}
+                            changeInfo={() => changeMainInfo(option.label, option.value)}
+                        />
+                    );
+                })}
+            </SelectContent>
+        </div>
+    );
+};
+
+export default SelectInput;

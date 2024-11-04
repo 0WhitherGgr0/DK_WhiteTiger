@@ -100,7 +100,8 @@ def login(request):
                 "user": {
                     "rol": usuario.rol,
                     "nombre": usuario.nombre,
-                    "contacto": usuario.contacto
+                    "contacto": usuario.contacto,
+                    "id": usuario.usuario_id
                 }
             }, status=status.HTTP_200_OK)
         else:
@@ -117,7 +118,23 @@ def generate_key_endpoint(request):
     _, salt = generate_salt_and_key()
     return Response({'salt': salt.hex()}, status=status.HTTP_200_OK)
 
-
+@api_view(['POST'])
+def create_conductor(request):
+    serializer = ConductorSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'success': True, 'data': serializer.data}, status=status.HTTP_201_CREATED)
+    else:
+        return Response({'success': False, 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
+def create_vehiculo(request):
+    serializer = VehiculoSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'success': True, 'data': serializer.data}, status=status.HTTP_201_CREATED)
+    else:
+        return Response({'success': False, 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 # Vista para Cliente
 class ClienteViewSet(viewsets.ModelViewSet):
     queryset = Cliente.objects.all()

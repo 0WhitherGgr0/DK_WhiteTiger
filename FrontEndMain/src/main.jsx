@@ -4,7 +4,8 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { AuthProvider } from './context/AuthContext';  
+import { AuthProvider } from './context/AuthContext'; 
+import { UserProvider } from './context/UserContext'; 
 import Root from "./routes/root";
 import ErrorPage from "./routes/error-page";
 import Login from "./routes/login";
@@ -19,9 +20,10 @@ import RutasVista from "./routes/dashboard/flotas/rutasVista";
 import FormVehiculo from "./routes/dashboard/flotas/formVehiculo";
 import PrivateRoute from "./routes/PrivateRoute";
 import { action as vehicleCreate } from "./routes/dashboard/flotas/formVehiculo";
-import { loadVehicles } from "./routes/dashboard/flotas/vehiculos";
 import RoleRoute from "./routes/PrivateRoute";
-
+import FormConductor from "./routes/dashboard/flotas/formConductores";
+import { action as conductorCreate } from "./routes/dashboard/flotas/formConductores";
+import { loader as loadVehicles} from "./routes/loaders/loaderVehiculos";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -88,6 +90,16 @@ const router = createBrowserRouter([
               </PrivateRoute>
             ),
             action: vehicleCreate
+          },
+          {
+            path: "/dashboard/flotas/conductores/nuevoConductor",
+            element: (
+              <PrivateRoute allowedRoles={['admin']}>
+                <FormConductor />
+              </PrivateRoute>
+            ),
+            loader: loadVehicles,
+            action: conductorCreate
           }
         ]
       },
@@ -105,8 +117,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
+    <AuthProvider>    
+      <UserProvider>
+        <RouterProvider router={router} />
+      </UserProvider>
     </AuthProvider>
   </React.StrictMode>
 );
