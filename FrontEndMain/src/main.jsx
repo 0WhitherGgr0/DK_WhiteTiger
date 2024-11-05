@@ -19,7 +19,10 @@ import { action as vehicleCreate } from "./routes/dashboard/flotas/formVehiculo"
 import RoleRoute from "./routes/PrivateRoute";
 import FormConductor from "./routes/dashboard/flotas/formConductores";
 import { action as conductorCreate } from "./routes/dashboard/flotas/formConductores";
-import { loader as loadVehicles} from "./routes/loaders/loaderVehiculos";
+import { loaderVehiculosYUsuarios } from "./routes/loaders/loaderVehiculos";
+import FormConductorEdit, { loader as formConductorEditLoader, action } from './routes/dashboard/flotas/formConductoresEdit';
+import FormVehiculoEdit, { loader as formVehiculoEditLoader, actionv }  from "./routes/dashboard/flotas/formVehiculoEdit";
+
 
 import Solicitudes from "./routes/dashboard/Solicitudes/solicitudes";
 import Pedidos from "./routes/dashboard/Solicitudes/pedidos";
@@ -30,6 +33,7 @@ import Flotas from "./routes/dashboard/flotas/flotas";
 import Rutas from "./routes/dashboard/rutas/rutas";
 import Vehiculos from "./routes/dashboard/flotas/vehiculos";
 import Conductores from "./routes/dashboard/flotas/conductores";
+import { loaderConductores } from "./routes/loaders/loaderConductores";
 
 const router = createBrowserRouter([
   {
@@ -50,7 +54,7 @@ const router = createBrowserRouter([
         element: <Panel/>
       },
       {
-        path: "/dashboard/solicitudes",
+        path: "solicitudes",
         element: (
           <PrivateRoute allowedRoles={['admin', 'conductor']}>
             <Solicitudes />
@@ -58,15 +62,15 @@ const router = createBrowserRouter([
         ),
         children: [
           {
-            path: "/dashboard/solicitudes/ordenes",
+            path: "ordenes",
             element: (
-              <PrivateRoute allowedRoles={['admin']}>
+              <PrivateRoute allowedRoles={['admin', 'conductor']}>
                 <Ordenes />
               </PrivateRoute>
             )
           },
           {
-            path: "/dashboard/solicitudes/pedidos",
+            path: "pedidos",
             element: (
               <PrivateRoute allowedRoles={['admin']}>
                 <Pedidos />
@@ -74,7 +78,7 @@ const router = createBrowserRouter([
             )
           },
           {
-            path: "/dashboard/solicitudes/pedidos/nuevoPedido",
+            path: "pedidos/nuevoPedido",
             element: (
               <PrivateRoute allowedRoles={['admin']}>
                 <FormPedido />
@@ -84,7 +88,7 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: "/dashboard/flotas",
+        path: "flotas",
         element: (
           <PrivateRoute allowedRoles={['admin']}>
             <Flotas />
@@ -92,23 +96,25 @@ const router = createBrowserRouter([
         ),
         children: [
           {
-            path: "/dashboard/flotas/vehiculos",
+            path: "vehiculos",
             element: (
               <PrivateRoute allowedRoles={['admin']}>
                 <Vehiculos />
               </PrivateRoute>
-            )
+            ),
+            loader: loaderVehiculosYUsuarios
           },
           {
-            path: "/dashboard/flotas/conductores",
+            path: "conductores",
             element: (
               <PrivateRoute allowedRoles={['admin']}>
                 <Conductores />
               </PrivateRoute>
-            )
+            ),
+            loader: loaderConductores
           },
           {
-            path: "/dashboard/flotas/rutas",
+            path: "rutas",
             element: (
               <PrivateRoute allowedRoles={['admin']}>
                 <RutasVista />
@@ -116,7 +122,7 @@ const router = createBrowserRouter([
             )
           },
           {
-            path: "/dashboard/flotas/vehiculos/nuevoVehiculo",
+            path: "vehiculos/nuevoVehiculo",
             element: (
               <PrivateRoute allowedRoles={['admin']}>
                 <FormVehiculo />
@@ -125,19 +131,40 @@ const router = createBrowserRouter([
             action: vehicleCreate
           },
           {
-            path: "/dashboard/flotas/conductores/nuevoConductor",
+            path: "conductores/nuevoConductor",
             element: (
               <PrivateRoute allowedRoles={['admin']}>
                 <FormConductor />
               </PrivateRoute>
             ),
-            loader: loadVehicles,
+            loader: loaderVehiculosYUsuarios,
             action: conductorCreate
-          }
+          },
+          {
+            path: "conductores/formConductoresEdit/:idConductor",
+            element: (
+              <PrivateRoute allowedRoles={['admin']}>
+                <FormConductorEdit />
+              </PrivateRoute>
+            ),
+            loader: formConductorEditLoader,
+            action: action
+          },
+          {
+            path: "vehiculos/formVehiculoEdit/:placa",
+            element: (
+              <PrivateRoute allowedRoles={['admin']}>
+                <FormVehiculoEdit />
+              </PrivateRoute>
+            ),
+            loader: formVehiculoEditLoader,
+            action: actionv
+        },
+        
         ]
       },
       {
-        path: "/dashboard/rutas",
+        path: "rutas",
         element: (
           <PrivateRoute allowedRoles={['admin', 'conductor']}>
             <Rutas />

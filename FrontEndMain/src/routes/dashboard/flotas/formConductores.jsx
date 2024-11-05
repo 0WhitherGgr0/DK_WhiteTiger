@@ -39,12 +39,17 @@ const estados = [
 export default function FormConductor() {
     const navigate = useNavigate();
     const actionData = useActionData();
-    const { vehiculos = [] } = useLoaderData() || {};
+    const { vehiculos = [], usuarios = [] } = useLoaderData() || {};
     const { userId } = useUser();
 
     const vehiculoOptions = vehiculos.map(vehiculo => ({
         label: `${vehiculo.marca} - ${vehiculo.placa}`,
         value: vehiculo.placa 
+    }));
+
+    const usuarioOptions = usuarios.map(usuario => ({
+      label: usuario.nombre,
+      value: usuario.usuario_id 
     }));
 
     function handleKeyDown(event) {
@@ -66,7 +71,14 @@ export default function FormConductor() {
                     <p className="errorMessage">{actionData.error}</p>
                 )}
                 
-                <input type="hidden" name="id_usuario" value={userId || ""} />
+                <SelectInputLabel 
+                  containerClass="panelCRUD_formInput"
+                  options={usuarioOptions} 
+                  info="Usuario Asociado" 
+                  name="id_usuario" 
+                  placeholder="Seleccionar usuario" 
+                  required 
+                />
 
                 <SelectInputLabel 
                   containerClass="panelCRUD_formInput"

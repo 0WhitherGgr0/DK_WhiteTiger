@@ -1,14 +1,22 @@
-// Función loader para cargar los datos de los vehículos
-export async function loader() {
-    try {
-      const response = await fetch("http://127.0.0.1:8000/api/v1/vehiculos"); // Asegúrate de que esta URL sea la correcta
-      if (!response.ok) throw new Error("Error al obtener los datos de vehículos");
+export async function loaderVehiculosYUsuarios() {
+  const API_URL = import.meta.env.VITE_API_URL;
   
-      const data = await response.json();
-      return { vehiculos: data }; // Devuelve los datos en un formato adecuado
-    } catch (error) {
-      console.error("Error al cargar los datos de vehículos:", error);
-      return { vehiculos: [] }; // Retorna un array vacío en caso de error
-    }
+  try {
+      const [vehiculosResponse, usuariosResponse] = await Promise.all([
+          fetch(`${API_URL}/vehiculos`),
+          fetch(`${API_URL}/usuarios`)
+      ]);
+
+      if (!vehiculosResponse.ok || !usuariosResponse.ok) {
+          throw new Error("Error al cargar los datos");
+      }
+
+      const vehiculos = await vehiculosResponse.json();
+      const usuarios = await usuariosResponse.json();
+
+      return { vehiculos, usuarios };
+  } catch (error) {
+      console.error("Error en loaderVehiculosYUsuarios:", error);
+      throw error;
   }
-  
+}

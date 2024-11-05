@@ -18,7 +18,6 @@ export async function action({ request }) {
     capacidad: parseFloat(formData.get("capacidad")),
     estado: formData.get("estado"),
   };
-  console.log(data); // Verifica los datos que se envían
 
   try {
     const response = await fetch(`${API_URL}/vehiculos/`, {
