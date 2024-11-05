@@ -20,7 +20,7 @@ export default function Header(){
             <h1 className="headerBox_tittle">RoadMap Pro</h1>
             <div className="headerBox_nav">             
                 <HeaderLink link={"/dashboard"} text={"Panel"}/>
-                <HeaderLink link={"/dashboard/ordenes"} text={"Órdenes"}/>
+                <HeaderLink link={"/dashboard/solicitudes/ordenes"} text={"Solicitudes"}/>
                 <HeaderLink link={"/dashboard/flotas/vehiculos"} text={"Flota"}/>
                 <HeaderLink link={"/dashboard/rutas"} text={"Rutas"}/>
                 <button className="headerBox_icon">

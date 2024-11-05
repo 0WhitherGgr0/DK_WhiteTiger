@@ -1,5 +1,5 @@
 import * as React from 'react';
-import "../styles/vehiculos.css"
+import "../styles/panelCRUD.css"
 import editPart1SVG from "../assets/edit1.svg"
 import editPart2SVG from "../assets/edit2.svg"
 import removeSVG from "../assets/remove.svg"

@@ -1,4 +1,4 @@
-import "../../../styles/vehiculos.css"
+import "../../../styles/panelCRUD.css"
 import plusSVG from "../../../assets/plus.svg"
 import TableCrud from "../../../components/tableCrud"
 import { useNavigate, useLoaderData } from 'react-router-dom';
@@ -75,15 +75,15 @@ export default function Vehiculos() {
   const data = loaderData?.data || []; // Si data es undefined, usa un array vacío
   console.log(data);
   return (
-      <div className="vehiculosBlock">
-          <div className="vehiculosBlock_tittle">
+      <div className="panelCRUD">
+          <div className="panelCRUD_tittle">
               <h2>Conductores</h2>
           </div>
-          <div className="vehiculosBlock_options">
-              <button className="vehiculosBlock_button" onClick={() => {
+          <div className="panelCRUD_options">
+              <button className="panelCRUD_button" onClick={() => {
                   navigate("/dashboard/flotas/conductores/nuevoConductor");
               }}>
-                  <div className="vehiculosBlock_icon">
+                  <div className="panelCRUD_icon">
                       <img src={plusSVG} alt="" />
                   </div>
                   Agregar Conductor

@@ -3,9 +3,8 @@ import SideBar from "../../../layout/sidebar"
 import '../../../styles/flota.css'
 import userSVG from "../../../assets/user2.svg"
 import vehicleSVG from "../../../assets/vehicle2.svg"
-import mapSVG from "../../../assets/map2.svg"
 
-const location = "/dashboard/flotas/"
+const location = "/dashboard/solicitudes/"
 
 function Route(to, svg, info){
     this.to = to;
@@ -14,11 +13,10 @@ function Route(to, svg, info){
 }
 
 const routes = []
-routes.push(new Route(location+"vehiculos",vehicleSVG,"Vehiculos"))
-routes.push(new Route(location+"conductores",userSVG,"Conductores"))
-routes.push(new Route(location+"rutas",mapSVG,"Rutas"))
+routes.push(new Route(location+"ordenes",vehicleSVG,"Ordenes"))
+routes.push(new Route(location+"pedidos",userSVG,"Pedidos"))
 
-export default function Flotas(){
+export default function Solicitudes(){
     return (
         <div className="contentDivider">
             <SideBar routes={routes}/>

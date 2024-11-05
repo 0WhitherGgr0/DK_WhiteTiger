@@ -11,11 +11,7 @@ import ErrorPage from "./routes/error-page";
 import Login from "./routes/login";
 import Dashboard from "./routes/dashboard/dashboard";
 import Panel from "./routes/dashboard/panel/panel";
-import Ordenes from "./routes/dashboard/ordenes/ordenes";
-import Flotas from "./routes/dashboard/flotas/flotas";
-import Rutas from "./routes/dashboard/rutas/rutas";
-import Vehiculos from "./routes/dashboard/flotas/vehiculos";
-import Conductores from "./routes/dashboard/flotas/conductores";
+
 import RutasVista from "./routes/dashboard/flotas/rutasVista";
 import FormVehiculo from "./routes/dashboard/flotas/formVehiculo";
 import PrivateRoute from "./routes/PrivateRoute";
@@ -24,6 +20,16 @@ import RoleRoute from "./routes/PrivateRoute";
 import FormConductor from "./routes/dashboard/flotas/formConductores";
 import { action as conductorCreate } from "./routes/dashboard/flotas/formConductores";
 import { loader as loadVehicles} from "./routes/loaders/loaderVehiculos";
+
+import Solicitudes from "./routes/dashboard/Solicitudes/solicitudes";
+import Pedidos from "./routes/dashboard/Solicitudes/pedidos";
+import Ordenes from "./routes/dashboard/Solicitudes/ordenes";
+
+import Flotas from "./routes/dashboard/flotas/flotas";
+import Rutas from "./routes/dashboard/rutas/rutas";
+import Vehiculos from "./routes/dashboard/flotas/vehiculos";
+import Conductores from "./routes/dashboard/flotas/conductores";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -43,12 +49,30 @@ const router = createBrowserRouter([
         element: <Panel/>
       },
       {
-        path: "/dashboard/ordenes",
+        path: "/dashboard/solicitudes",
         element: (
           <PrivateRoute allowedRoles={['admin', 'conductor']}>
-            <Ordenes />
+            <Solicitudes />
           </PrivateRoute>
-        )
+        ),
+        children: [
+          {
+            path: "/dashboard/solicitudes/ordenes",
+            element: (
+              <PrivateRoute allowedRoles={['admin']}>
+                <Ordenes />
+              </PrivateRoute>
+            )
+          },
+          {
+            path: "/dashboard/solicitudes/pedidos",
+            element: (
+              <PrivateRoute allowedRoles={['admin']}>
+                <Pedidos />
+              </PrivateRoute>
+            )
+          },
+        ]
       },
       {
         path: "/dashboard/flotas",

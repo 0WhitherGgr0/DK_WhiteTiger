@@ -1,4 +1,4 @@
-import "../styles/vehiculos.css"
+import "../styles/panelCRUD.css"
 import SelectInput from "./select/selectInput"
 
 export default function SelectInputLabel({containerClass, placeholder = "", info, name, options}){

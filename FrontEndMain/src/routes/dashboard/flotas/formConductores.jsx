@@ -1,5 +1,5 @@
 import { useNavigate, Form, useActionData, useLoaderData } from 'react-router-dom';
-import "../../../styles/vehiculos.css";
+import "../../../styles/panelCRUD.css";
 import SelectInputLabel from '../../../components/selectInputLabel';
 import TextInput from '../../../components/textInput';
 import { useUser } from '../../../context/UserContext';
@@ -54,12 +54,12 @@ export default function FormConductor() {
     }
 
     return (
-        <div className="vehiculosBlock">
-          <div className="vehiculosBlock_tittle">
+        <div className="panelCRUD">
+          <div className="panelCRUD_tittle">
             <h2>Conductores</h2>
           </div>
-          <div className="vehiculosBlock_container">
-            <fieldset className="vehiculosBlock_formContainer">
+          <div className="panelCRUD_container">
+            <fieldset className="panelCRUD_formContainer">
               <legend>Agregar Conductor</legend>
               <Form method="post">
                 {actionData?.error && (
@@ -69,7 +69,7 @@ export default function FormConductor() {
                 <input type="hidden" name="id_usuario" value={userId || ""} />
 
                 <SelectInputLabel 
-                  containerClass="vehiculosBlock_formInput"
+                  containerClass="panelCRUD_formInput"
                   options={vehiculoOptions} 
                   info="Vehículo Asociado" 
                   name="id_vehiculo" 
@@ -78,7 +78,7 @@ export default function FormConductor() {
                 />
 
                 <SelectInputLabel 
-                  containerClass="vehiculosBlock_formInput"
+                  containerClass="panelCRUD_formInput"
                   options={estados} 
                   info="Estado" 
                   name="estado" 
@@ -86,14 +86,14 @@ export default function FormConductor() {
                   required
                 />
                 <TextInput 
-                  containerClass="vehiculosBlock_formInput"
+                  containerClass="panelCRUD_formInput"
                   info="Brevete" 
                   name="breve"  
                   placeholder="Ej: ABC-123" 
                   required
                 />
 
-                <div className="vehiculosBlock_buttonGroup">
+                <div className="panelCRUD_buttonGroup">
                   <button type="reset" onClick={() => navigate(-1)}>
                     Cancelar
                   </button>
