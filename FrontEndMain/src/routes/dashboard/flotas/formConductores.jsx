@@ -6,7 +6,7 @@ import { useUser } from '../../../context/UserContext';
 
 export async function action({ request }) {
   const formData = await request.formData();
-  
+  const API_URL = import.meta.env.VITE_API_URL;
   const data = {
       usuario: formData.get("id_usuario"),  
       vehiculo: formData.get("id_vehiculo"),
@@ -17,7 +17,7 @@ export async function action({ request }) {
   console.log("Datos enviados al backend:", data);
   
   try {
-      const response = await fetch("http://127.0.0.1:8000/api/v1/conductores/", {
+      const response = await fetch(`${API_URL}/conductores/`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)

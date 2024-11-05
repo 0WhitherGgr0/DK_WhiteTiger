@@ -23,21 +23,20 @@ export default function Login() {
     const { setUserId } = useUser();
 
     const navigate = useNavigate();
-
+    const API_URL = import.meta.env.VITE_API_URL;
     useEffect(() => {
         if (isAuthenticated()) {
             navigate('/dashboard');
         } else {
-            // Obtener el salt solo una vez cuando se carga el componente
             getSaltFromBackend();
         }
     }, [isAuthenticated, navigate]);
 
     const getSaltFromBackend = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/v1/generate-key');
+            const response = await fetch(`${API_URL}/generate-key`);
             const data = await response.json();
-            setSalt(data.salt);  // Guardar el salt en el estado
+            setSalt(data.salt); 
         } catch (error) {
             console.error("Error al obtener el salt del backend:", error);
             setError("No se pudo conectar con el servidor");
@@ -52,8 +51,8 @@ export default function Login() {
             }
     
             const endpoint = isLogin
-                ? 'http://127.0.0.1:8000/api/v1/login/'
-                : 'http://127.0.0.1:8000/api/v1/register/';
+                ? `${API_URL}/login/`
+                : `${API_URL}/register/`;
     
             // Encriptar el password antes de enviarlo al backend usando el salt almacenado
             const encryptedPassword = await encryptData({ password }, salt);

@@ -14,7 +14,6 @@ export function UserProvider({ children }) {
     );
 }
 
-// Hook para usar el contexto
 export function useUser() {
     return useContext(UserContext);
 }

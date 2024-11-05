@@ -6,7 +6,7 @@ import TextInput from '../../../components/textInput';
 
 export async function action({ request }) {
   const formData = await request.formData();
-
+  const API_URL = import.meta.env.VITE_API_URL;
   const data = {
     marca: formData.get("marca"),
     modelo: formData.get("modelo"),
@@ -21,7 +21,7 @@ export async function action({ request }) {
   console.log(data); // Verifica los datos que se envían
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/api/v1/vehiculos/", {
+    const response = await fetch(`${API_URL}/vehiculos/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

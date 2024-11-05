@@ -12,7 +12,7 @@ const PrivateRoute = ({ children, allowedRoles }) => {
 
     if (allowedRoles && !allowedRoles.includes(role)) {
         alert('No tienes permisos para acceder a esta ruta');
-        return <Navigate to="/dashboard" />; // Redirige si el rol no es permitido
+        return <Navigate to="/dashboard" />; 
     }
 
     return children;

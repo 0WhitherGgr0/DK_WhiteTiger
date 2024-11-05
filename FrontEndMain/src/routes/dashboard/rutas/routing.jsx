@@ -3,9 +3,9 @@ import L from "leaflet";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
 import { useMap } from "react-leaflet";
-
+const ROUTE_URL = import.meta.env.VITE_ROUTE_URL;
 const routerService = new L.Routing.osrmv1({
-  serviceUrl: 'http://localhost:5000/route/v1'
+  serviceUrl: `${ROUTE_URL}`
 });
 
 function addRoute(sourceCity,destinationCity,map,constrolArray,color){

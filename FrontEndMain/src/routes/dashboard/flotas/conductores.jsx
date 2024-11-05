@@ -3,7 +3,7 @@ import plusSVG from "../../../assets/plus.svg"
 import TableCrud from "../../../components/tableCrud"
 import { useNavigate, useLoaderData } from 'react-router-dom';
 
-const API_URL = 'http://127.0.0.1:5000';
+const API_URL = import.meta.env.VITE_API_URL;
 export async function loadVehicles() {
     console.log("Trayendo datos")
     try {

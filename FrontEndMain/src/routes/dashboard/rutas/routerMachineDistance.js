@@ -1,9 +1,9 @@
 import L from "leaflet";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
-
+const ROUTE_URL = import.meta.env.VITE_ROUTE_URL;
 const router = new L.Routing.OSRMv1({
-    serviceUrl: 'http://localhost:5000/route/v1'
+    serviceUrl: `${ROUTE_URL}`
 })
 
 export default function getDistance(start, end) {

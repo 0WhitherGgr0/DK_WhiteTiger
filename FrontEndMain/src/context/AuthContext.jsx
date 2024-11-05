@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     const login = (userRole) => {
         localStorage.setItem('role', userRole);
         console.log('User role set in context:', userRole);
-        setRole(userRole); // Actualiza el estado solo con el rol
+        setRole(userRole); 
     };
 
     const logout = () => {

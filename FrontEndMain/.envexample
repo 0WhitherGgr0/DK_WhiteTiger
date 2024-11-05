@@ -1,0 +1,4 @@
+VITE_API_URL=Link
+<!-- <!-- VITE_API_URL=http://127.0.0.1:8000/api/v1 -->
+VITE_ROUTE_URL=Link 
+<!-- VITE_ROUTE_URL=http://localhost:5000/route/v1 --> -->
