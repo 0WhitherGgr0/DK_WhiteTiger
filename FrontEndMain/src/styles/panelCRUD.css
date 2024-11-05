@@ -146,6 +146,27 @@
     justify-content: end;
 }
 
+.panelCRUD_tableOptions{
+    display: flex;
+    gap: 25px;
+}
+
+.panelCRUD_tableIcon{
+    text-align: right;
+    width: 32px;
+    height: 32px;
+}
+
+.panelCRUD_iconJoiner{
+    position: relative;
+}
+
+.panelCRUD_iconJoiner .panelCRUD_tableIcon:nth-child(2){
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 form button{
     font-weight: 600;
     border: none;

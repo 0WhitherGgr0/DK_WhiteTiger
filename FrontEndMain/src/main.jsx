@@ -23,6 +23,7 @@ import { loader as loadVehicles} from "./routes/loaders/loaderVehiculos";
 
 import Solicitudes from "./routes/dashboard/Solicitudes/solicitudes";
 import Pedidos from "./routes/dashboard/Solicitudes/pedidos";
+import FormPedido from "./routes/dashboard/Solicitudes/formPedido";
 import Ordenes from "./routes/dashboard/Solicitudes/ordenes";
 
 import Flotas from "./routes/dashboard/flotas/flotas";
@@ -69,6 +70,14 @@ const router = createBrowserRouter([
             element: (
               <PrivateRoute allowedRoles={['admin']}>
                 <Pedidos />
+              </PrivateRoute>
+            )
+          },
+          {
+            path: "/dashboard/solicitudes/pedidos/nuevoPedido",
+            element: (
+              <PrivateRoute allowedRoles={['admin']}>
+                <FormPedido />
               </PrivateRoute>
             )
           },

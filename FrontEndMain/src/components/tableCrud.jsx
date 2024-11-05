@@ -1,5 +1,4 @@
 import * as React from 'react';
-import "../styles/panelCRUD.css"
 import editPart1SVG from "../assets/edit1.svg"
 import editPart2SVG from "../assets/edit2.svg"
 import removeSVG from "../assets/remove.svg"
@@ -64,24 +63,24 @@ export default function TableCrud({heads, rows}){
                         <StyledTableCell key={head.id} style={{ minWidth: head.minWidth }} className={`head_${head.special}`}>                                
                             {                                
                                 (head.key === "estado") ?                                   
-                                 (<div className="vehiculosBlock_tableStates">                                                                                           
+                                 (<div className="panelCRUD_tableStates">                                                                                           
                                     {row.estado.map((item)=>(                                         
-                                        <div className={`vehiculosBlock_tableState vehiculosBlock_tableState--${item}`}>                               
+                                        <div className={`panelCRUD_tableState panelCRUD_tableState--${item}`}>                               
                                             <p>{item}</p>                                   
                                         </div>                                                      
                                     ))}                                    
                                  </div>)                                   
                                 : ( head.key == "opciones" ) ?                                 
-                                (<div className="vehiculosBlock_tableOptions">
-                                    <div className="vehiculosBlock_iconJoiner">
-                                         <div className="vehiculosBlock_tableIcon">
+                                (<div className="panelCRUD_tableOptions">
+                                    <div className="panelCRUD_iconJoiner">
+                                         <div className="panelCRUD_tableIcon">
                                             <img src={editPart1SVG} alt="" />
                                         </div>
-                                        <div className="vehiculosBlock_tableIcon">
+                                        <div className="panelCRUD_tableIcon">
                                             <img src={editPart2SVG} alt="" />
                                         </div>
                                     </div>
-                                    <div className="vehiculosBlock_tableIcon">
+                                    <div className="panelCRUD_tableIcon">
                                         <img src={removeSVG} alt="" />
                                     </div>
                                 </div>) 

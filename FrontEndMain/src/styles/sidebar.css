@@ -45,23 +45,3 @@
     align-content: center;
 }
 
-.vehiculosBlock_tableOptions{
-    display: flex;
-    gap: 25px;
-}
-
-.vehiculosBlock_tableIcon{
-    text-align: right;
-    width: 32px;
-    height: 32px;
-}
-
-.vehiculosBlock_iconJoiner{
-    position: relative;
-}
-
-.vehiculosBlock_iconJoiner .vehiculosBlock_tableIcon:nth-child(2){
-    position: absolute;
-    top: 0;
-    left: 0;
-}
