@@ -199,3 +199,19 @@ input[type=date]::-webkit-calendar-picker-indicator {
     align-items: center;
     justify-content: center;
 }
+
+.panelCRUD_divider{
+    display: flex;
+}
+
+.panelCRUD_map{
+    flex: 1;
+    padding: 10px 0px 10px 30px;
+}
+
+.panelCRUD_Form{
+    height: 100%;
+    flex: 1.5;
+    display: flex; 
+    justify-content: space-between
+}
