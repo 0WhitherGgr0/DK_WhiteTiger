@@ -26,7 +26,9 @@ import FormVehiculoEdit, { loader as formVehiculoEditLoader, actionv }  from "./
 
 import Solicitudes from "./routes/dashboard/Solicitudes/solicitudes";
 import Pedidos from "./routes/dashboard/Solicitudes/pedidos";
+import { loaderPedidos } from "./routes/loaders/loaderPedidos";
 import FormPedido from "./routes/dashboard/Solicitudes/formPedido";
+import { action as pedidoCreate } from "./routes/dashboard/Solicitudes/formPedido";
 import Ordenes from "./routes/dashboard/Solicitudes/ordenes";
 
 import Flotas from "./routes/dashboard/flotas/flotas";
@@ -75,7 +77,8 @@ const router = createBrowserRouter([
               <PrivateRoute allowedRoles={['admin']}>
                 <Pedidos />
               </PrivateRoute>
-            )
+            ),
+            loader: loaderPedidos
           },
           {
             path: "pedidos/nuevoPedido",
@@ -83,7 +86,8 @@ const router = createBrowserRouter([
               <PrivateRoute allowedRoles={['admin']}>
                 <FormPedido />
               </PrivateRoute>
-            )
+            ),
+            action: pedidoCreate
           },
         ]
       },
