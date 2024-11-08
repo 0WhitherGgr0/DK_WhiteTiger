@@ -43,9 +43,11 @@ export default function FormConductor() {
     const { vehiculos = [], usuarios = [] } = useLoaderData() || {};
     const { userId } = useUser();
 
-    const vehiculoOptions = vehiculos.map(vehiculo => ({
-        label: `${vehiculo.marca} - ${vehiculo.placa}`,
-        value: vehiculo.placa 
+    const vehiculoOptions = vehiculos
+        .filter(vehiculo => vehiculo.estado === "Activo")
+        .map(vehiculo => ({
+            label: `${vehiculo.marca} - ${vehiculo.placa}`,
+            value: vehiculo.placa 
     }));
 
     const usuarioOptions = usuarios.map(usuario => ({

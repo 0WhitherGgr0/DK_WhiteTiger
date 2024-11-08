@@ -63,10 +63,13 @@ export default function FormVehiculoEdit() {
         { label: 'Inactivo', value: 'Inactivo' }
     ];
 
-    const vehiculoOptions = vehiculos.map(vehiculo => ({
-        label: `${vehiculo.marca} - ${vehiculo.placa}`,
-        value: vehiculo.placa 
-    }));
+    // Filtrar vehículos con estado "Activo"
+    const vehiculoOptions = vehiculos
+        .filter(vehiculo => vehiculo.estado === "Activo")
+        .map(vehiculo => ({
+            label: `${vehiculo.marca} - ${vehiculo.placa}`,
+            value: vehiculo.placa 
+        }));
 
     const [formData, setFormData] = useState({
         usuario_id: conductor?.usuario || '',
@@ -74,7 +77,7 @@ export default function FormVehiculoEdit() {
         breve: conductor?.breve || '',
         estado: conductor?.estado || ''
     });
-    console.log("Datos del conductor:", formData.breve);
+
     useEffect(() => {
         if (conductor) {
             setFormData({
@@ -89,6 +92,7 @@ export default function FormVehiculoEdit() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
+        console.log("Formulario actualizado:", { [name]: value });
     };
 
     const handleKeyDown = (event) => {
@@ -123,7 +127,7 @@ export default function FormVehiculoEdit() {
                   info="Vehículo Asociado" 
                   name="vehiculo_id" 
                   placeholder="Seleccionar vehículo"
-                  value={formData.vehiculo_id || ''}
+                  value={formData.vehiculo_id}
                   onChange={handleChange}
                   required 
                 />
@@ -134,7 +138,7 @@ export default function FormVehiculoEdit() {
                   info="Estado" 
                   name="estado" 
                   placeholder="Seleccionar estado" 
-                  value={formData.estado || ''}
+                  value={formData.estado}
                   onChange={handleChange}
                   required
                 />
