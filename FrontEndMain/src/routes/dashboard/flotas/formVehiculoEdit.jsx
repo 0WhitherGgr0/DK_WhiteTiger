@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useNavigate, Form, useLoaderData, useActionData } from 'react-router-dom';
 import TextInput from '../../../components/textInput';
 import SelectInputLabel from '../../../components/selectInputLabel';
@@ -9,9 +10,9 @@ export async function actionv({ request, params }) {
     const formData = await request.formData();
     const { placa } = params;
 
-    // Mapea los datos en el formato que el backend espera, incluyendo `placa`
+    // Mapear los datos en el formato que el backend espera
     const data = {
-        placa, // Agrega `placa` al cuerpo de la solicitud
+        placa,
         marca: formData.get("marca"),
         modelo: formData.get("modelo"),
         color: formData.get("color"),
@@ -35,7 +36,7 @@ export async function actionv({ request, params }) {
             const errorText = await response.text();
             throw new Error(`Error al actualizar el vehículo. Estado: ${response.status}, Error: ${errorText}`);
         }
-
+        alert("Vehículo actualizado correctamente.");
         return { success: true };
     } catch (error) {
         console.error("Error en la solicitud PUT:", error);
@@ -63,10 +64,42 @@ export default function FormVehiculoEdit() {
     const { vehiculo } = useLoaderData();
     const actionData = useActionData();
 
+    const [formData, setFormData] = useState({
+        marca: '',
+        modelo: '',
+        color: '',
+        capacidad: '',
+        estado: '',
+        soat: '',
+        registro: '',
+        año_fabricacion: ''
+    });
+
+    // Inicializa los datos del formulario cuando el vehículo se carga
+    useEffect(() => {
+        if (vehiculo) {
+            setFormData({
+                marca: vehiculo.marca || '',
+                modelo: vehiculo.modelo || '',
+                color: vehiculo.color || '',
+                capacidad: vehiculo.capacidad || '',
+                estado: vehiculo.estado || '',
+                soat: vehiculo.soat || '',
+                registro: vehiculo.registro || '',
+                año_fabricacion: vehiculo.año_fabricacion || ''
+            });
+        }
+    }, [vehiculo]);
+
     const estadoOptions = [
         { label: 'Activo', value: 'Activo' },
         { label: 'Inactivo', value: 'Inactivo' }
     ];
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
 
     return (
         <div className="panelCRUD">
@@ -85,7 +118,8 @@ export default function FormVehiculoEdit() {
                             info="Marca" 
                             name="marca"  
                             placeholder="Ej: Toyota" 
-                            defaultValue={vehiculo.marca}
+                            value={formData.marca}
+                            onChange={handleChange}
                             required
                         />
 
@@ -94,7 +128,8 @@ export default function FormVehiculoEdit() {
                             info="Modelo" 
                             name="modelo"  
                             placeholder="Ej: Corolla" 
-                            defaultValue={vehiculo.modelo}
+                            value={formData.modelo}
+                            onChange={handleChange}
                             required
                         />
 
@@ -103,7 +138,8 @@ export default function FormVehiculoEdit() {
                             info="Color" 
                             name="color"  
                             placeholder="Ej: Rojo" 
-                            defaultValue={vehiculo.color}
+                            value={formData.color}
+                            onChange={handleChange}
                             required
                         />
 
@@ -112,7 +148,8 @@ export default function FormVehiculoEdit() {
                             info="Capacidad" 
                             name="capacidad"  
                             placeholder="Ej: 5" 
-                            defaultValue={vehiculo.capacidad}
+                            value={formData.capacidad}
+                            onChange={handleChange}
                             required
                         />
 
@@ -122,17 +159,18 @@ export default function FormVehiculoEdit() {
                             info="Estado" 
                             name="estado" 
                             placeholder="Seleccionar estado" 
-                            defaultValue={vehiculo.estado}
+                            value={formData.estado}
+                            onChange={handleChange}
                             required
                         />
 
-                        {/* Campos adicionales requeridos */}
                         <TextInput 
                             containerClass="panelCRUD_formInput"
                             info="SOAT" 
                             name="soat"  
                             placeholder="Número de SOAT" 
-                            defaultValue={vehiculo.soat}
+                            value={formData.soat}
+                            onChange={handleChange}
                             required
                         />
 
@@ -141,7 +179,8 @@ export default function FormVehiculoEdit() {
                             info="Registro" 
                             name="registro"  
                             type="date" 
-                            defaultValue={vehiculo.registro}
+                            value={formData.registro}
+                            onChange={handleChange}
                             required
                         />
 
@@ -150,7 +189,8 @@ export default function FormVehiculoEdit() {
                             info="Año de Fabricación" 
                             name="año_fabricacion"  
                             placeholder="Ej: 2020" 
-                            defaultValue={vehiculo.año_fabricacion}
+                            value={formData.año_fabricacion}
+                            onChange={handleChange}
                             required
                         />
 

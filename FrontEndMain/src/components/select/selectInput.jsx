@@ -4,11 +4,21 @@ import SelectButton from './selectButton';
 import SelectContent from './selectContent';
 import SelectItem from './selectItem';
 
-const SelectInput = ({ name, placeholder, options }) => {
+const SelectInput = ({ name, placeholder, options, value, onChange }) => {
     const [open, setOpen] = useState(false);
-    const [currInfo, setCurrInfo] = useState({ info: placeholder, id: options[0]?.value || "" });
+    const [currInfo, setCurrInfo] = useState({ info: placeholder, id: value || "" });
     const selectRef = useRef();
     const refsInputs = useRef(new Map());
+
+    useEffect(() => {
+        // Actualiza currInfo cuando el valor de `value` cambia desde el componente padre
+        if (value) {
+            const selectedOption = options.find(option => option.value === value);
+            if (selectedOption) {
+                setCurrInfo({ info: selectedOption.label, id: selectedOption.value });
+            }
+        }
+    }, [value, options]);
 
     useEffect(() => {
         const handlerCancelation = (event) => {
@@ -43,8 +53,9 @@ const SelectInput = ({ name, placeholder, options }) => {
         }
     };
 
-    const changeMainInfo = (label, value) => {
-        setCurrInfo({ info: label, id: value });
+    const changeMainInfo = (label, id) => {
+        setCurrInfo({ info: label, id });
+        onChange && onChange({ target: { name, value: id } }); // Llama a `onChange` desde el componente padre
         activateSelect();
     };
 
@@ -52,8 +63,8 @@ const SelectInput = ({ name, placeholder, options }) => {
         <div className='custom-select' ref={selectRef}>
             <input type="hidden" name={name} value={currInfo.id} />
 
-            <SelectButton info={currInfo} action={() => { handleFocus(currInfo.id); activateSelect(); }}>
-            </SelectButton>
+            <SelectButton info={currInfo} action={() => { handleFocus(currInfo.id); activateSelect(); }} />
+
             <SelectContent isOpen={open} width={selectRef.current ? selectRef.current.offsetWidth : 0}>
                 {options.map((option) => {
                     const id = option.value || option.label; 

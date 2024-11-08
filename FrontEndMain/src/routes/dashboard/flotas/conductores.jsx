@@ -16,7 +16,12 @@ export default function Conductores() {
         navigate(`/dashboard/flotas/conductores/formConductoresEdit/${idConductor}`);
     };
 
-    const handleDelete = async (idConductor) => {
+    const handleDelete = async (idConductor, estado) => {
+        if (estado != "Inactivo") { 
+            alert("Solo los conductores con estado 'Inactivo' pueden ser eliminados.");
+            return;
+        }
+
         if (window.confirm("¿Estás seguro de que deseas eliminar este conductor?")) {
             try {
                 console.log(`Eliminando conductor con ID: ${idConductor}`);
@@ -73,7 +78,15 @@ export default function Conductores() {
                     Agregar Conductor
                 </button>
             </div>
-            <TableCrud heads={heads} rows={rows} onEdit={handleEdit} onDelete={handleDelete} />
+            <TableCrud 
+                heads={heads} 
+                rows={rows} 
+                onEdit={handleEdit} 
+                onDelete={(idConductor) => {
+                    const conductor = conductores.find(c => c.usuario === idConductor);
+                    handleDelete(idConductor, conductor?.estado);
+                }} 
+            />
         </div>
     );
 }

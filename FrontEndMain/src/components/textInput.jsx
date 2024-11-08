@@ -1,38 +1,31 @@
-import { useState } from "react"
-import "../styles/panelCRUD.css"
+import { useEffect, useState } from "react";
+import "../styles/panelCRUD.css";
 
-export default function TextInput({containerClass, value = null, placeholder = "", type = "text", info, name, options}){
+export default function TextInput({ containerClass, value = "", placeholder = "", type = "text", info, name, onChange }) {
+    const [inputValue, setInputValue] = useState(value);
 
-    function handleKeyDown(event) {
-        if (event.keyCode === 13 ) {
-          event.preventDefault();
-        }
-    }    
+    useEffect(() => {
+        setInputValue(value);
+    }, [value]);
+
+    const handleChange = (event) => {
+        const newValue = event.target.value;
+        setInputValue(newValue);
+        onChange && onChange({ target: { name, value: newValue } });
+    };
 
     return (
-        <div className="panelCRUD_formInput">
+        <div className={containerClass}>
             <label htmlFor={name}>{info}</label>
-            {value ? 
-                <input 
-                    onKeyDown={handleKeyDown}  
-                    readOnly={true}
-                    type={type} 
-                    id={name} 
-                    value={value}
-                    name={name}
-                    required={true}
-                    placeholder={placeholder}>
-                </input> : 
-                <input 
-                    onKeyDown={handleKeyDown}  
-                    type={type} 
-                    id={name} 
-                    name={name}
-                    required={true}
-                    placeholder={placeholder}>
-                </input>
-            }
+            <input
+                type={type}
+                id={name}
+                name={name}
+                value={inputValue}
+                onChange={handleChange}
+                placeholder={placeholder}
+                required
+            />
         </div>
-    )
-
+    );
 }
