@@ -15,23 +15,24 @@ class Producto(models.Model):
     tipo = models.CharField(max_length=50)
     peso = models.DecimalField(max_digits=10, decimal_places=2)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
-    registro = models.CharField(max_length=50)
+    registro = models.DateTimeField(auto_now_add=True)
     nombre = models.CharField(max_length=100)
     marca = models.CharField(max_length=50)
 
 class Ubicacion(models.Model):
     ubicacion_id = models.AutoField(primary_key=True)
     referencia = models.CharField(max_length=100)
-    latitud = models.DecimalField(max_digits=9, decimal_places=6)
-    longitud = models.DecimalField(max_digits=9, decimal_places=6)
+    latitud = models.DecimalField(max_digits=18, decimal_places=14)
+    longitud = models.DecimalField(max_digits=18, decimal_places=14)
 
 class Pedido(models.Model):
     pedido_id = models.AutoField(primary_key=True)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    registro = models.CharField(max_length=50)
+    registro = models.DateTimeField(auto_now_add=True)
     ubicacion = models.ForeignKey(Ubicacion, on_delete=models.CASCADE)
-    peso_total = models.DecimalField(max_digits=10, decimal_places=2)
+    peso_total = models.DecimalField(max_digits=10, decimal_places=3)
     estado = models.CharField(max_length=20)
+    volumen = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)  # Nuevo campo
 
 class Linea(models.Model):
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
@@ -60,10 +61,14 @@ class Vehiculo(models.Model):
     marca = models.CharField(max_length=50)
     modelo = models.CharField(max_length=50)
     color = models.CharField(max_length=30)
-    registro = models.CharField(max_length=50)
+    registro = models.DateTimeField(auto_now_add=True) 
     año_fabricacion = models.IntegerField()
     capacidad = models.DecimalField(max_digits=10, decimal_places=2)
     estado = models.CharField(max_length=20)
+    maximo_recorrido_diario = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)  # Nuevo atributo
+    maxima_capacidad = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)  # Nuevo atributo
+    total_recorrido = models.DecimalField(max_digits=15, decimal_places=2, default=0.0)  # Nuevo atributo
+
 
 class Conductor(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True)
