@@ -1,5 +1,3 @@
-from django.db import models
-
 # Create your models here.
 from django.db import models
 
@@ -21,14 +19,14 @@ class Producto(models.Model):
 
 class Ubicacion(models.Model):
     ubicacion_id = models.AutoField(primary_key=True)
-    referencia = models.CharField(max_length=100)
-    latitud = models.DecimalField(max_digits=18, decimal_places=14)
-    longitud = models.DecimalField(max_digits=18, decimal_places=14)
+    referencia = models.CharField(max_length=102)
+    latitud = models.DecimalField(max_digits=22, decimal_places=18)
+    longitud = models.DecimalField(max_digits=22, decimal_places=18)
 
 class Pedido(models.Model):
     pedido_id = models.AutoField(primary_key=True)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    registro = models.DateTimeField(auto_now_add=True)
+    registro = models.DateField(auto_now_add=True)
     ubicacion = models.ForeignKey(Ubicacion, on_delete=models.CASCADE)
     peso_total = models.DecimalField(max_digits=10, decimal_places=3)
     estado = models.CharField(max_length=20)
@@ -61,15 +59,14 @@ class Vehiculo(models.Model):
     marca = models.CharField(max_length=50)
     modelo = models.CharField(max_length=50)
     color = models.CharField(max_length=30)
-    registro = models.DateTimeField(auto_now_add=True) 
+    registro = models.DateField(auto_now_add=True) 
     año_fabricacion = models.IntegerField()
-    capacidad = models.DecimalField(max_digits=10, decimal_places=2)
+    maximo_recorrido_diario = models.DecimalField(max_digits=10, decimal_places=2) 
+    maxima_capacidad = models.DecimalField(max_digits=10, decimal_places=2) 
+    total_recorrido = models.DecimalField(max_digits=15, decimal_places=2)  
+    capacidad = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     estado = models.CharField(max_length=20)
-    maximo_recorrido_diario = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)  # Nuevo atributo
-    maxima_capacidad = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)  # Nuevo atributo
-    total_recorrido = models.DecimalField(max_digits=15, decimal_places=2, default=0.0)  # Nuevo atributo
-
-
+   
 class Conductor(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True)
     vehiculo = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)

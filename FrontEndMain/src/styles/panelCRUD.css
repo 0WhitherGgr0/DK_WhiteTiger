@@ -69,6 +69,10 @@
     background-color: #E2E2E4;
 }
 
+.panelCRUD_tableState--Almacen{
+    background-color: #E2E2E4;
+}
+
 .panelCRUD_formContainer{
     margin: 0px 50px;
     border-radius: 10px;

@@ -29,7 +29,7 @@ export async function action({ request, params }) {
           throw new Error(`Error al actualizar el conductor. Estado: ${response.status}, Error: ${errorText}`);
       }
       alert("Conductor actualizado correctamente.");
-      return { success: true };
+      return redirect("/dashboard/flotas/conductores");
   } catch (error) {
       return { success: false, error: error.message };
   }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../styles/panelCRUD.css";
 
-export default function TextInput({ containerClass, value = "", placeholder = "", type = "text", info, name, onChange }) {
+export default function TextInput({ containerClass, value = "", placeholder = "", type = "text", info, name, onChange, step = "1"}) {
     const [inputValue, setInputValue] = useState(value);
 
     useEffect(() => {
@@ -25,6 +25,7 @@ export default function TextInput({ containerClass, value = "", placeholder = ""
                 onChange={handleChange}
                 placeholder={placeholder}
                 required
+                step={step}
             />
         </div>
     );

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Form, useLoaderData, useActionData } from 'react-router-dom';
+import { useNavigate, Form, useLoaderData, useActionData, redirect } from 'react-router-dom';
 import TextInput from '../../../components/textInput';
 import SelectInputLabel from '../../../components/selectInputLabel';
 import "../../../styles/panelCRUD.css";
@@ -10,7 +10,6 @@ export async function actionv({ request, params }) {
     const formData = await request.formData();
     const { placa } = params;
 
-    // Mapear los datos en el formato que el backend espera
     const data = {
         placa,
         marca: formData.get("marca"),
@@ -37,7 +36,7 @@ export async function actionv({ request, params }) {
             throw new Error(`Error al actualizar el vehículo. Estado: ${response.status}, Error: ${errorText}`);
         }
         alert("Vehículo actualizado correctamente.");
-        return { success: true };
+        return redirect("/dashboard/flotas/vehiculos");
     } catch (error) {
         console.error("Error en la solicitud PUT:", error);
         return { success: false, error: error.message };

@@ -21,15 +21,15 @@ export async function loaderConductores() {
         const usuarios = await Promise.all(usuarioResponses.map(res => res.json()));
 
         // Crear un mapa de usuarios con su ID como clave para acceder fácilmente al nombre
-        const usuarioMap = usuarios.reduce((map, usuario) => {
-            map[usuario.id] = usuario.nombre;  // Ajusta `nombre` según el campo de tu API
+        const usuarioMap = usuarios.reduce((map, us) => {
+            console.log(us.usuario_id)
+            map[us.usuario_id] = us.nombre;  // Ajusta `nombre` según el campo de tu API
             return map;
         }, {});
-
         // Combina el nombre de usuario con cada conductor
         const conductoresConNombre = conductores.map(conductor => ({
             ...conductor,
-            nombre: usuarioMap[conductor.id_usuario] || "Desconocido"
+            nombre: usuarioMap[conductor.usuario] || "Desconocido"
         }));
 
         return { conductores: conductoresConNombre };

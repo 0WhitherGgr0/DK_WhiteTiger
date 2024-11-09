@@ -39,8 +39,8 @@ const heads = [
     minWidth: 156,
   },
   {
-    id: 'Altitud',
-    key: "altitud",
+    id: 'Longitud',
+    key: "longitud",
     special: "",
     minWidth: 156,
   },
@@ -60,10 +60,9 @@ export default function Pedidos() {
 
   const rows = pedidos.map((pedido) => (
     {
-        peso: pedido.peso,
-        volumen: 0,
-        estado: Array.isArray(vehiculo.estado) ? pedido.estado : [pedido.estado],
-        ubicacion: vehiculo.ubicacion || 'Desconocido',
+        peso: pedido.peso_total,
+        volumen: pedido.volumen,
+        estado: Array.isArray(pedido.estado) ? pedido.estado : [pedido.estado],
         idPedido: pedido.pedido_id,
         latitud: pedido.latitud,
         longitud: pedido.longitud

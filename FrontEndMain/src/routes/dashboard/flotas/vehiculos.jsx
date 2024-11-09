@@ -8,7 +8,9 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const heads = [
     { id: 'Placa Vehicular', key: "placa", special: "", minWidth: 149 },
-    { id: 'Capacidad', key: "capacidad", special: "special", minWidth: 112 },
+    { id: 'Capacidad Usada', key: "capacidad", special: "special", minWidth: 112 },
+    { id: 'Maxima Capacidad', key: "maxCapacidad", special: "special", minWidth: 112 },
+    { id: 'Maxixmo Recorrido', key: "maxRecorrido", special: "special", minWidth: 112 },
     { id: 'Estado', key: "estado", special: "", minWidth: 150 },
     { id: 'Ubicación', key: "ubicacion", special: "special", minWidth: 145 },
     { id: 'Actualización', key: "actualizacion", special: "special", minWidth: 156 },
@@ -20,13 +22,14 @@ export default function Vehiculos() {
     const { vehiculos: initialVehiculos = [] } = useLoaderData();
 
     const [vehiculos, setVehiculos] = useState(initialVehiculos);
-
     const rows = vehiculos.map(vehiculo => ({
         placa: vehiculo.placa,
         capacidad: vehiculo.capacidad,
+        maxCapacidad: vehiculo.maxima_capacidad,
+        maxRecorrido: vehiculo.maximo_recorrido_diario,
         estado: Array.isArray(vehiculo.estado) ? vehiculo.estado : [vehiculo.estado],
         ubicacion: vehiculo.ubicacion || 'Desconocido',
-        actualizacion: vehiculo.actualizacion || 'N/A',
+        actualizacion: vehiculo.registro || 'N/A',
         opciones: vehiculo.estado === "Inactivo" 
     }));
 

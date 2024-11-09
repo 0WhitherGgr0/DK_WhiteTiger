@@ -16,7 +16,7 @@ export default function Conductores() {
         navigate(`/dashboard/flotas/conductores/formConductoresEdit/${idConductor}`);
     };
 
-    const handleDelete = async (idConductor, estado) => {
+    const handleDelete = async (idConductor, vehiculo, estado) => {
         if (estado != "Inactivo") { 
             alert("Solo los conductores con estado 'Inactivo' pueden ser eliminados.");
             return;
@@ -29,6 +29,12 @@ export default function Conductores() {
                 const response = await fetch(`${API_URL}/conductores/${idConductor}/`, {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" }
+                });
+
+                const response2 = await fetch(`${API_URL}/vehiculos/${vehiculo}/`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({estado: "Inactivo"})
                 });
 
                 if (!response.ok) {
@@ -49,19 +55,25 @@ export default function Conductores() {
     const heads = [
         { id: 'ID Conductor', key: "idConductor", special: "", minWidth: 149 },
         { id: 'Nombre', key: "nombre", special: "", minWidth: 200 },
+        { id: 'Vehiculo', key: "vehiculo", special: "", minWidth: 150 },
         { id: 'Estado', key: "estado", special: "", minWidth: 150 },
         { id: 'Categoría', key: "categoria", special: "", minWidth: 150 },
         { id: 'Actualización', key: "actualizacion", special: "", minWidth: 156 },
         { id: 'Opciones', key: "opciones", special: "", minWidth: 117 },
     ];
 
+    console.log(conductores)
+
     const rows = conductores.map(conductor => ({
         idConductor: conductor.usuario,
+        vehiculo: conductor.vehiculo,
         nombre: conductor.nombre,
         estado: Array.isArray(conductor.estado) ? conductor.estado : [conductor.estado],
         categoria: conductor.categoria,
         actualizacion: conductor.actualizacion,
     }));
+
+    console.log(rows)
 
     return (
         <div className="panelCRUD">
@@ -82,9 +94,9 @@ export default function Conductores() {
                 heads={heads} 
                 rows={rows} 
                 onEdit={handleEdit} 
-                onDelete={(idConductor) => {
+                onDelete={(idConductor, vehiculo) => {
                     const conductor = conductores.find(c => c.usuario === idConductor);
-                    handleDelete(idConductor, conductor?.estado);
+                    handleDelete(idConductor, vehiculo, conductor?.estado);
                 }} 
             />
         </div>

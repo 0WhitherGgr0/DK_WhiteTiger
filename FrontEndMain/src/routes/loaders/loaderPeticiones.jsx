@@ -1,16 +1,18 @@
-export async function loaderPedidos() {
+export async function loaderPeticiones() {
     const API_URL = import.meta.env.VITE_API_URL;
-
+    
     try {
-        const pedidosResponse = await fetch(`${API_URL}/pedidos`);
 
-        if (!pedidosResponse.ok) {
-            throw new Error("Error al cargar los datos de conductores");
+        const [vehiculosResponse, pedidosResponse] = await Promise.all([
+            fetch(`${API_URL}/vehiculos`),
+            fetch(`${API_URL}/pedidos`)
+        ]);
+  
+        if (!vehiculosResponse.ok || !pedidosResponse.ok) {
+            throw new Error("Error al cargar los datos");
         }
 
         const pedidos = await pedidosResponse.json();
-
-        console.log(pedidos)
 
         const ubicacionesId = [...new Set(pedidos.map(pedidos => pedidos.ubicacion))];
 
@@ -32,11 +34,11 @@ export async function loaderPedidos() {
                 longitud: ubicacionesMap[pedido.ubicacion].longitud
             }
         ))
-
-
-        return { pedidos: pedidosUb };
+        const vehiculos = await vehiculosResponse.json();
+  
+        return { vehiculos, pedidosUb };
     } catch (error) {
-        console.error("Error en loaderConductores:", error);
+        console.error("Error en loaderVehiculosYUsuarios:", error);
         throw error;
     }
-}
+  }

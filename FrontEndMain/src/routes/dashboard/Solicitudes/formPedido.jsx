@@ -6,7 +6,7 @@ import "../../../styles/rutas.css"
 import "../../../styles/panelCRUD.css"
 import { useRef, useState, useMemo } from 'react';
 import TextInput from '../../../components/textInput';
-import { Form, useActionData } from 'react-router-dom';
+import { Form, redirect, useActionData } from 'react-router-dom';
 
 
 export async function action({ request }) {
@@ -14,8 +14,8 @@ export async function action({ request }) {
     const API_URL = import.meta.env.VITE_API_URL;
     const dataUb = {
         referencia: "...",
-        latitud: 100,  
-        longitud: 101,
+        latitud: formData.get("latitud"),  
+        longitud: formData.get("longitud"),
     };
 
     console.log("Datos de envio enviados al backend:", dataUb);
@@ -30,6 +30,7 @@ export async function action({ request }) {
         });
         if (!response.ok) throw new Error("Error al enviar datos ubicacion");
         const dataRecieve = await response.json();
+        console.log(dataRecieve)
         ubID = dataRecieve.ubicacion_id
     }catch (error) {
         console.error("Error:", error);
@@ -37,11 +38,11 @@ export async function action({ request }) {
     }
 
     const dataP = {
-        estado: "En espera",
-        registro: "07/11/2024",
-        cliente: "1",
+        estado: "Almacen",
+        cliente: 1,
         peso_total: formData.get("peso_total"),
-        ubicacion: ubID 
+        ubicacion: ubID ,
+        volumen: formData.get("volumen")
     }
 
     try {
@@ -52,7 +53,7 @@ export async function action({ request }) {
         });
         
         if (!response.ok) throw new Error("Error al enviar datos");
-        return { success: true };
+        return redirect("/dashboard/solicitudes/pedidos");
 
     } catch (error) {
         console.error("Error:", error);
@@ -78,7 +79,6 @@ function MapEvents({setEvent}){
 
     useMapEvents({
         click: (e) => {
-            console.log(e.latlng)
             setEvent(e.latlng);
         }
     })

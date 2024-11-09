@@ -1,4 +1,4 @@
-import { useNavigate, Form, useActionData, useLoaderData } from 'react-router-dom';
+import { useNavigate, Form, useActionData, useLoaderData, redirect } from 'react-router-dom';
 import "../../../styles/panelCRUD.css";
 import SelectInputLabel from '../../../components/selectInputLabel';
 import TextInput from '../../../components/textInput';
@@ -11,7 +11,7 @@ export async function action({ request }) {
   const data = {
       usuario: formData.get("id_usuario"),  
       vehiculo: formData.get("id_vehiculo"),
-      estado: formData.get("estado"),
+      estado: "Inactivo",
       breve: formData.get("breve"), 
   };
   
@@ -23,19 +23,20 @@ export async function action({ request }) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)
       });
+
+      const response2 = await fetch(`${API_URL}/vehiculos/${formData.get("id_vehiculo")}/` ,{
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({estado: "Activo"})
+      })
       
       if (!response.ok) throw new Error("Error al enviar datos");
-      return { success: true };
+      return redirect("/dashboard/flotas/conductores");
   } catch (error) {
       console.error("Error:", error);
       return { success: false, error: error.message };
   }
 }
-
-const estados = [
-    { label: 'Activo', value: 'Activo' },
-    { label: 'Inactivo', value: 'Inactivo' },
-];
 
 export default function FormConductor() {
     const navigate = useNavigate();
@@ -43,8 +44,10 @@ export default function FormConductor() {
     const { vehiculos = [], usuarios = [] } = useLoaderData() || {};
     const { userId } = useUser();
 
+
+
     const vehiculoOptions = vehiculos
-        .filter(vehiculo => vehiculo.estado === "Activo")
+        .filter(vehiculo => vehiculo.estado === "Inactivo")
         .map(vehiculo => ({
             label: `${vehiculo.marca} - ${vehiculo.placa}`,
             value: vehiculo.placa 
@@ -91,15 +94,6 @@ export default function FormConductor() {
                   placeholder="Seleccionar vehículo" 
                   required 
                 />
-
-                <SelectInputLabel 
-                  containerClass="panelCRUD_formInput"
-                  options={estados} 
-                  info="Estado" 
-                  name="estado" 
-                  placeholder="Seleccionar estado" 
-                  required
-                />
                 <TextInput 
                   containerClass="panelCRUD_formInput"
                   info="Brevete" 
@@ -107,7 +101,6 @@ export default function FormConductor() {
                   placeholder="Ej: ABC-123" 
                   required
                 />
-
                 <div className="panelCRUD_buttonGroup">
                   <button type="reset" onClick={() => navigate(-1)}>
                     Cancelar

@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import "../../../styles/panelCRUD.css";
 import { Form } from 'react-router-dom';
 import SelectInputLabel from '../../../components/selectInputLabel';
@@ -14,25 +14,27 @@ export async function action({ request }) {
     color: formData.get("color"),
     placa: formData.get("placa"),
     soat: formData.get("soat"),
-    registro: formData.get("registro"),
-    capacidad: parseFloat(formData.get("capacidad")),
-    estado: formData.get("estado"),
+    maximo_recorrido_diario: formData.get("maximo_recorrido"),
+    maxima_capacidad: formData.get("maxima_capacidad"),
+    capacidad: 0,
+    total_recorrido: 0,
+    estado: "Inactivo",
   };
-
+  console.log(data)
   try {
     const response = await fetch(`${API_URL}/vehiculos/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
     });
-
+    console.log(response)
     if (!response.ok) {
         const errorData = await response.json();
         console.error("Error en el servidor:", errorData);
         throw new Error("Error al enviar datos");
     }
     
-    return { success: true };
+    return redirect("/dashboard/flotas/vehiculos");
 } catch (error) {
     console.error("Error:", error);
     return { success: false, error: error.message };
@@ -49,10 +51,22 @@ const marcas = [
   { label: 'Marca6', value: 'Marca6' },
 ];
 
-const estados = [
-  { label: 'Activo', value: 'Activo' },
-  { label: 'Inactivo', value: 'Inactivo' },
+const modelos = [
+  { label: 'Modelo1', value: 'Modelo1' },
+  { label: 'Modelo1', value: 'Modelo2' },
+  { label: 'Modelo3', value: 'Modelo3' },
+  { label: 'Modelo4', value: 'Modelo4' },
+  { label: 'Modelo5', value: 'Modelo5' },
+  { label: 'Modelo6', value: 'Modelo6' },
 ];
+
+const colores = [
+  { label: 'Color1', value: 'Color1' },
+  { label: 'Color2', value: 'Color2' },
+  { label: 'Color3', value: 'Color3' },
+];
+
+
 
 export default function FormVehiculo() {
   const navigate = useNavigate();
@@ -81,7 +95,7 @@ export default function FormVehiculo() {
             />
             <SelectInputLabel 
               containerClass="panelCRUD_formInput"
-              options={marcas} 
+              options={modelos} 
               info="Modelo" 
               name="modelo" 
               placeholder="Seleccionar modelo" 
@@ -95,7 +109,7 @@ export default function FormVehiculo() {
             />
             <SelectInputLabel 
               containerClass="panelCRUD_formInput"
-              options={marcas} 
+              options={colores} 
               info="Color" 
               name="color" 
               placeholder="Seleccionar color" 
@@ -114,24 +128,17 @@ export default function FormVehiculo() {
             />
             <TextInput 
               containerClass="panelCRUD_formInput"
-              info="Registro" 
-              name="registro" 
-              type="date" 
-            />
+              info="Máximo Recorrido" 
+              name="maximo_recorrido"
+              type='number'
+              step="100" 
+            /> 
             <TextInput 
               containerClass="panelCRUD_formInput"
-              info="Capacidad" 
-              name="capacidad" 
+              info="Máxima Capacidad" 
+              name="maxima_capacidad" 
               placeholder="Ej: 4.5" 
               type="number" 
-              step="0.01" 
-            />
-            <SelectInputLabel 
-              containerClass="panelCRUD_formInput"
-              options={estados} 
-              info="Estado" 
-              name="estado" 
-              placeholder="Seleccionar estado" 
             />
             <div className="panelCRUD_buttonGroup">
               <button type="reset" onClick={() => navigate(-1)}>

@@ -37,6 +37,8 @@ import Vehiculos from "./routes/dashboard/flotas/vehiculos";
 import Conductores from "./routes/dashboard/flotas/conductores";
 import { loaderConductores } from "./routes/loaders/loaderConductores";
 
+import { loaderPeticiones } from "./routes/loaders/loaderPeticiones";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -173,7 +175,8 @@ const router = createBrowserRouter([
           <PrivateRoute allowedRoles={['admin', 'conductor']}>
             <Rutas />
           </PrivateRoute>
-        )
+        ),
+        loader: loaderPeticiones,
       }
     ]
   }

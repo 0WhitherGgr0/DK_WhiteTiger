@@ -38,12 +38,12 @@ class UsuarioSerializer(serializers.ModelSerializer):
 class VehiculoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehiculo
-        fields = ['placa', 'soat', 'marca', 'modelo', 'color', 'registro', 'año_fabricacion', 'capacidad', 'estado']
+        fields = '__all__'
 
 class ConductorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conductor
-        fields = ['usuario', 'vehiculo', 'breve', 'estado']  
+        fields = '__all__'
 
 class RecorridoSerializer(serializers.ModelSerializer):
     class Meta:

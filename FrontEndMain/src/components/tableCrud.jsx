@@ -61,7 +61,7 @@ export default function TableCrud({ heads, rows, onEdit, onDelete }) {
                 {heads.map((head) => {
                     const value = row[head.key];
                     return (
-                        <StyledTableCell key={head.id} style={{ minWidth: head.minWidth }} className={`head_${head.special}`}>
+                        <StyledTableCell key={head.id} style={{ minWidth: head.minWidth, overflow: 'hidden' }} className={`head_${head.special}`}>
                             {
                                 head.key === "estado" ? (
                                     <div className="panelCRUD_tableStates">
@@ -89,7 +89,7 @@ export default function TableCrud({ heads, rows, onEdit, onDelete }) {
                                         </button>
                                         <button
                                             className="panelCRUD_tableIcon transparent-button"
-                                            onClick={() => onDelete(row.idConductor || row.placa)}
+                                            onClick={() => onDelete(row.idConductor || row.placa, row?.vehiculo)}
                                             title="Eliminar"
                                         >
                                             <img src={removeSVG} alt="Eliminar" />
