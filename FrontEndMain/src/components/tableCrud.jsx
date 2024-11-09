@@ -63,43 +63,53 @@ export default function TableCrud({ heads, rows, onEdit, onDelete }) {
                     return (
                         <StyledTableCell key={head.id} style={{ minWidth: head.minWidth, overflow: 'hidden' }} className={`head_${head.special}`}>
                             {
-                                head.key === "estado" ? (
-                                    <div className="panelCRUD_tableStates">
-                                        {row.estado.map((item) => (
-                                            <div className={`panelCRUD_tableState panelCRUD_tableState--${item}`} key={item}>
+                            head.key === "estado" ? (
+                                <div className="panelCRUD_tableStates">
+                                    {Array.isArray(row.estado) ? (
+                                        row.estado.map((item) => (
+                                            <div
+                                                className={`panelCRUD_tableState panelCRUD_tableState--${item}`}
+                                                key={item}
+                                            >
                                                 <p>{item}</p>
                                             </div>
-                                        ))}
-                                    </div>
-                                ) : head.key === "opciones" ? (
-                                    <div className="panelCRUD_tableOptions">
-                                        <button
-                                            className="panelCRUD_tableIcon transparent-button"
-                                            onClick={() => onEdit(row.idConductor || row.placa)}
-                                            title="Editar"
-                                        >
-                                            <div className="panelCRUD_iconJoiner">
-                                                <div className="panelCRUD_tableIcon">
-                                                    <img src={editPart1SVG} alt="Editar parte 1" />
-                                                </div>
-                                                <div className="panelCRUD_tableIcon">
-                                                    <img src={editPart2SVG} alt="Editar parte 2" />
-                                                </div>
+                                        ))
+                                    ) : (
+                                        <div className={`panelCRUD_tableState panelCRUD_tableState--${row.estado}`}>
+                                            <p>{row.estado}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            ) : head.key === "opciones" ? (
+                                <div className="panelCRUD_tableOptions">
+                                    <button
+                                        className="panelCRUD_tableIcon transparent-button"
+                                        onClick={() => onEdit(row.idConductor || row.placa)}
+                                        title="Editar"
+                                    >
+                                        <div className="panelCRUD_iconJoiner">
+                                            <div className="panelCRUD_tableIcon">
+                                                <img src={editPart1SVG} alt="Editar parte 1" />
                                             </div>
-                                        </button>
-                                        <button
-                                            className="panelCRUD_tableIcon transparent-button"
-                                            onClick={() => onDelete(row.idConductor || row.placa, row?.vehiculo)}
-                                            title="Eliminar"
-                                        >
-                                            <img src={removeSVG} alt="Eliminar" />
-                                        </button>
-                                    </div>
 
-                                ) : (
-                                    value
-                                )
-                            }
+                                            <div className="panelCRUD_tableIcon">
+                                                <img src={editPart2SVG} alt="Editar parte 2" />
+                                            </div>
+                                        </div>
+                                    </button>
+                                    <button
+                                        className="panelCRUD_tableIcon transparent-button"
+                                        onClick={() => onDelete(row.idConductor || row.placa, row?.vehiculo)}
+                                        title="Eliminar"
+                                    >
+                                        <img src={removeSVG} alt="Eliminar" />
+                                    </button>
+                                </div>
+                            ) : (
+                                value
+                            )
+                        }
+
                         </StyledTableCell>
                     );
                 })}

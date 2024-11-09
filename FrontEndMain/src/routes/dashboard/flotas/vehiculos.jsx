@@ -79,6 +79,15 @@ export default function Vehiculos() {
                 <h2>Vehículos</h2>
             </div>
             <div className="panelCRUD_options">
+                <button className="panelCRUD_button" onClick={() => navigate("/dashboard/flotas/vehiculos/vehiculosActivos")}>
+                    <div className="panelCRUD_icon">
+                        <img src={plusSVG} alt="" />
+                    </div>
+                    Ver Vehículos Activos
+                </button>
+                <div>
+                    
+                </div>
                 <button className="panelCRUD_button" onClick={() => navigate("/dashboard/flotas/vehiculos/nuevoVehiculo")}>
                     <div className="panelCRUD_icon">
                         <img src={plusSVG} alt="" />
