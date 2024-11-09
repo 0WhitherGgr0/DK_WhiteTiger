@@ -23,7 +23,6 @@ import { loaderVehiculosYUsuarios } from "./routes/loaders/loaderVehiculos";
 import FormConductorEdit, { loader as formConductorEditLoader, action } from './routes/dashboard/flotas/formConductoresEdit';
 import FormVehiculoEdit, { loader as formVehiculoEditLoader, actionv }  from "./routes/dashboard/flotas/formVehiculoEdit";
 
-
 import Solicitudes from "./routes/dashboard/Solicitudes/solicitudes";
 import Pedidos from "./routes/dashboard/Solicitudes/pedidos";
 import { loaderPedidos } from "./routes/loaders/loaderPedidos";
@@ -36,6 +35,8 @@ import Rutas from "./routes/dashboard/rutas/rutas";
 import Vehiculos from "./routes/dashboard/flotas/vehiculos";
 import Conductores from "./routes/dashboard/flotas/conductores";
 import { loaderConductores } from "./routes/loaders/loaderConductores";
+import UsuarioDetalles, {loader as UsuarioDetallesloader} from "./routes/dashboard/user/userdata";
+import VehiculosActivos from "./routes/dashboard/flotas/vehiculosActivos";
 
 const router = createBrowserRouter([
   {
@@ -163,8 +164,16 @@ const router = createBrowserRouter([
             ),
             loader: formVehiculoEditLoader,
             action: actionv
-        },
-        
+          },
+          {
+            path: "vehiculos/vehiculosActivos",
+            element: (
+              <PrivateRoute allowedRoles={['admin']}>
+                <VehiculosActivos />
+              </PrivateRoute>
+            ),
+            loader: loaderVehiculosYUsuarios,
+          }
         ]
       },
       {
@@ -174,6 +183,15 @@ const router = createBrowserRouter([
             <Rutas />
           </PrivateRoute>
         )
+      },
+      {
+        path: "user",
+        element: (
+          <PrivateRoute allowedRoles={['admin', 'conductor']}>
+            <UsuarioDetalles />
+          </PrivateRoute>
+        ),
+        loader: UsuarioDetallesloader
       }
     ]
   }

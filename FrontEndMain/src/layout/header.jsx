@@ -27,7 +27,7 @@ export default function Header(){
                     <img src={bellSVG} alt="" />
                 </button>
                 <button className="headerBox_icon" onClick={()=>{
-                    navigate("..", { relative: "path" });
+                    navigate("/dashboard/user", { relative: "path" });
                 }}>
                     <img src={userSVG} alt="" />
                 </button>
