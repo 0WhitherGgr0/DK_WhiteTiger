@@ -113,7 +113,13 @@ class Usuario(models.Model):
     usuario_contraseña = models.CharField(max_length=200, null=False, blank=False)  
     usuario_email = models.CharField(max_length=100, null=False, blank=False)  
     usuario_fecha_nac = models.DateField(null=True, blank=True)  
-    usuario_rol = models.ForeignKey(RolUsuario, on_delete=models.SET_NULL, null=True, blank=True)
+    usuario_rol = models.ForeignKey(
+        RolUsuario, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True,
+        default=lambda: RolUsuario.objects.get(rol_nombre="conductor").rol_tipo
+    )
     usuario_doc = models.ForeignKey(DocumentoUsuario, on_delete=models.SET_NULL, null=True, blank=True)  
     usuario_telefono = models.CharField(max_length=11, null=True, blank=True)  
     usuario_estado = models.ForeignKey(Estado, on_delete=models.SET_NULL, null=True, blank=True)
@@ -121,6 +127,7 @@ class Usuario(models.Model):
 
     def __str__(self):
         return f"{self.usuario_nombre} {self.usuario_apellido}"
+
 
 class Conductor(models.Model):
     conductor_id = models.AutoField(primary_key=True) 

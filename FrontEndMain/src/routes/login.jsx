@@ -14,13 +14,16 @@ import React, { useState, useEffect } from 'react';
 export default function Login() {
     const { login, isAuthenticated } = useAuth();
     const [isLogin, setIsLogin] = useState(true);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
+    const [usuario_email, setEmail] = useState('');
+    const [usuario_contraseña, setPassword] = useState('');
+    const [usuario_nombre, setName] = useState('');
+    const [usuario_apellido, setApellido] = useState('');
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
     const [salt, setSalt] = useState(null); 
     const { setUserId } = useUser();
+    const [usuario_fecha_nac, setDate] = useState('');
+    const [usuario_telefono, setTelefono] = useState('');
 
     const navigate = useNavigate();
     const API_URL = import.meta.env.VITE_API_URL;
@@ -55,11 +58,11 @@ export default function Login() {
                 : `${API_URL}/register/`;
     
             // Encriptar el password antes de enviarlo al backend usando el salt almacenado
-            const encryptedPassword = await encryptData({ password }, salt);
+            const encryptedPassword = await encryptData({ usuario_contraseña }, salt);
             console.log("Password encriptado:", encryptedPassword);
             const body = isLogin
-                ? { email, password: encryptedPassword }
-                : { name, email, password: encryptedPassword };
+                ? { usuario_email, usuario_contraseña: encryptedPassword }
+                : { usuario_nombre, usuario_apellido, usuario_fecha_nac, usuario_telefono,usuario_email, usuario_contraseña: encryptedPassword };
     
             const response = await fetch(endpoint, {
                 method: 'POST',
@@ -116,6 +119,7 @@ export default function Login() {
                 </div>
                 <div className="formBox_form">
                     {!isLogin &&
+                    <div>
                         <div className="formBox_input">
                             <div className="formBox_icon">
                                 <img src={userSVG} alt="User icon" />
@@ -123,11 +127,53 @@ export default function Login() {
                             <input
                                 type="text"
                                 className="formBox_inputText"
-                                placeholder='Nombres'
-                                value={name}
+                                placeholder='Nombre'
+                                value={usuario_nombre}
                                 onChange={(e) => setName(e.target.value)}
                             />
                         </div>
+                        <div className="formBox_input">
+                            <div className="formBox_icon">
+                                <img src={userSVG} alt="User icon" />
+                            </div>
+                            <input
+                                type="text"
+                                className="formBox_inputText"
+                                placeholder='Apellido'
+                                value={usuario_apellido}
+                                onChange={(e) => setApellido(e.target.value)}
+                            />
+                        </div>
+                        <div className="formBox_input">
+                            <div className="formBox_icon">
+                                <img src={userSVG} alt="Calendar icon" />
+                            </div>
+                            <input
+                                type="date"
+                                className="formBox_inputText"
+                                value={usuario_fecha_nac}
+                                onChange={(e) => setDate(e.target.value)}
+                            />
+                        </div>
+                        <div className="formBox_input">
+                        <div className="formBox_icon">
+                            <img src={userSVG} alt="User icon" />
+                        </div>
+                        <input
+                            type="text"
+                            className="formBox_inputText"
+                            placeholder="Teléfono (9 dígitos)"
+                            value={usuario_telefono}
+                            onChange={(e) => {
+                                const input = e.target.value;
+                                if (/^\d{0,9}$/.test(input)) {
+                                    setTelefono(input);
+                                }
+                            }}
+                        />
+                        </div>
+                    </div>
+                        
                     }
                     <div className="formBox_input">
                         <div className="formBox_icon">
@@ -137,7 +183,7 @@ export default function Login() {
                             type="email"
                             className="formBox_inputText"
                             placeholder='Correo'
-                            value={email}
+                            value={usuario_email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
@@ -152,7 +198,7 @@ export default function Login() {
                             type="password"
                             className="formBox_inputText"
                             placeholder='Contraseña'
-                            value={password}
+                            value={usuario_contraseña}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
