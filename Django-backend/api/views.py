@@ -22,6 +22,7 @@ import hmac
 import os
 import bcrypt
 import json
+import re
 from .models import Usuario
 from django.db.utils import IntegrityError
 
@@ -64,24 +65,43 @@ def decrypt_data(encrypted_data):
 def register(request):
     data = request.data
     try:
+        telefono = data.get("usuario_telefono")
+        if not telefono or not re.match(r'^\d{9}$', telefono):
+            return Response({"message": "El número de teléfono debe contener exactamente 9 dígitos."}, status=status.HTTP_400_BAD_REQUEST)
         # Obtener los datos enviados por el frontend
-        name = data.get('name')
-        email = data.get('email')
+        nombre = data.get('usuario_nombre')
+        apellido = data.get('usuario_apellido')
+        email = data.get('usuario_email')
+        fecha_nac = data.get('usuario_fecha_nac')        
+        telefono = data.get('usuario_telefono')
+        print(data)
+        print("/////////////////////////////")
+        print(nombre, apellido, email, fecha_nac, telefono)
 
         # Descifrar y hashear la contraseña
-        decrypted_data = decrypt_data(data['password'])
-        password = decrypted_data['password'].encode('utf-8')
+        decrypted_data = decrypt_data(data['usuario_contraseña'])
+        password = decrypted_data['usuario_contraseña'].encode('utf-8')
         hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
 
         # Verificar si el usuario ya existe
-        if Usuario.objects.filter(contacto=email).exists():
+        if Usuario.objects.filter(usuario_email=email).exists():
             return Response({"message": "Usuario ya registrado"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Buscar el rol "conductor" en la base de datos
+        try:
+            rol_conductor = RolUsuario.objects.get(rol_nombre="conductor")
+        except RolUsuario.DoesNotExist:
+            return Response({"message": "El rol 'conductor' no existe en la base de datos"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         # Crear un nuevo usuario con valores predeterminados en los campos adicionales
         usuario = Usuario(
-            nombre=name,
-            contacto=email,
-            contraseña=hashed_password.decode('utf-8'),
+            usuario_nombre=nombre,
+            usuario_apellido=apellido,
+            usuario_email=email,
+            usuario_contraseña=hashed_password.decode('utf-8'),
+            usuario_fecha_nac=fecha_nac,
+            usuario_telefono=telefono,
+            usuario_rol=rol_conductor,  # Asignar el rol dinámicamente
         )
         usuario.save()
 
@@ -95,28 +115,43 @@ def register(request):
 def login(request):
     data = request.data
     try:
-        # Obtener el email y descifrar la contraseña
-        email = data.get('email')
-        decrypted_data = decrypt_data(data['password'])
-        password = decrypted_data['password'].encode('utf-8')
+        # Verificar que los datos requeridos están presentes
+        email = data.get('usuario_email')
+        encrypted_password = data.get('usuario_contraseña')
+
+        if not email or not encrypted_password:
+            return Response({"message": "Faltan campos obligatorios"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Descifrar la contraseña
+        decrypted_data = decrypt_data(encrypted_password)
+        if not isinstance(decrypted_data, dict) or 'usuario_contraseña' not in decrypted_data:
+            return Response({"message": "Error al descifrar la contraseña"}, status=status.HTTP_400_BAD_REQUEST)
+
+        password = decrypted_data['usuario_contraseña'].encode('utf-8')
 
         # Verificar si el usuario existe y si la contraseña es correcta
-        usuario = Usuario.objects.filter(contacto=email).first()
-        if usuario and bcrypt.checkpw(password, usuario.contraseña.encode('utf-8')):
+        usuario = Usuario.objects.filter(usuario_email=email).first()
+        if usuario and bcrypt.checkpw(password, usuario.usuario_contraseña.encode('utf-8')):
+            # Asegurar que los datos del usuario sean serializables
+            usuario_data = {
+                "rol": usuario.usuario_rol.rol_nombre if usuario.usuario_rol else "Sin rol asignado",
+                "nombre": usuario.usuario_nombre,
+                "contacto": usuario.usuario_telefono or "No disponible",  # Manejo de campos nulos
+                "id": usuario.usuario_id,
+            }
             return Response({
                 "message": "Inicio de sesión exitoso",
-                "user": {
-                    "rol": usuario.rol,
-                    "nombre": usuario.nombre,
-                    "contacto": usuario.contacto,
-                    "id": usuario.usuario_id
-                }
+                "user": usuario_data
             }, status=status.HTTP_200_OK)
         else:
             return Response({"message": "Credenciales incorrectas"}, status=status.HTTP_401_UNAUTHORIZED)
 
     except Exception as e:
-        return Response({"message": f"Error en el proceso de inicio de sesión: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # Registro detallado del error para depuración
+        print(f"Error en el proceso de inicio de sesión: {e}")
+        return Response({"message": "Error en el proceso de inicio de sesión, por favor intente nuevamente."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 
 
     
@@ -199,11 +234,11 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 class VehiculoViewSet(viewsets.ModelViewSet):
     queryset = Vehiculo.objects.all()
     serializer_class = VehiculoSerializer
-
+    # lookup_field = 'vehiculo_placa'
 class ConductorViewSet(viewsets.ModelViewSet):
     queryset = Conductor.objects.all()
     serializer_class = ConductorSerializer
-
+    
 class RecorridoViewSet(viewsets.ModelViewSet):
     queryset = Recorrido.objects.all()
     serializer_class = RecorridoSerializer

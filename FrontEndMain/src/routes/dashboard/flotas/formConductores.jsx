@@ -54,7 +54,7 @@ export default function FormConductor() {
     }));
 
     const usuarioOptions = usuarios.map(usuario => ({
-      label: usuario.nombre,
+      label: usuario.usuario_nombre,
       value: usuario.usuario_id 
     }));
 
@@ -98,8 +98,14 @@ export default function FormConductor() {
                   containerClass="panelCRUD_formInput"
                   info="Brevete" 
                   name="breve"  
-                  placeholder="Ej: ABC-123" 
+                  placeholder='123456789'
                   required
+                  validate={(value) => /^\d{0,9}$/.test(value)} 
+                  onChange={({ target: { value } }) => {
+                    if (/^\d{0,9}$/.test(value)) {
+                      setAnoFabricacion(value);
+                    }
+                  }}
                 />
                 <div className="panelCRUD_buttonGroup">
                   <button type="reset" onClick={() => navigate(-1)}>

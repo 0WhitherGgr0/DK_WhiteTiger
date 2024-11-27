@@ -135,6 +135,7 @@ const router = createBrowserRouter([
                 <FormVehiculo />
               </PrivateRoute>
             ),
+            loader: loaderVehiculosYUsuarios,
             action: vehicleCreate
           },
           {
@@ -164,7 +165,7 @@ const router = createBrowserRouter([
                 <FormVehiculoEdit />
               </PrivateRoute>
             ),
-            loader: formVehiculoEditLoader,
+            loader: loaderVehiculosYUsuarios,
             action: actionv
           },
           {

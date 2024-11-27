@@ -8,7 +8,8 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Conductores() {
     const navigate = useNavigate();
-    const { conductores: initialConductores = [] } = useLoaderData();
+    const { conductores: initialConductores = [], estados = {} } = useLoaderData();
+    console.log("Estados:", estados);
 
     const [conductores, setConductores] = useState(initialConductores);
 
@@ -17,7 +18,7 @@ export default function Conductores() {
     };
 
     const handleDelete = async (idConductor, vehiculo, estado) => {
-        if (estado != "Inactivo") { 
+        if (!estado || estado !== "Inactivo") {
             alert("Solo los conductores con estado 'Inactivo' pueden ser eliminados.");
             return;
         }
@@ -34,17 +35,17 @@ export default function Conductores() {
                 const response2 = await fetch(`${API_URL}/vehiculos/${vehiculo}/`, {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({estado: "Inactivo"})
+                    body: JSON.stringify({ estado: "Inactivo" })
                 });
 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Error al eliminar el conductor. Estado: ${response.status}, Error: ${errorText}`);
+                if (!response.ok || !response2.ok) {
+                    throw new Error("Error al eliminar el conductor o actualizar el vehículo.");
                 }
 
                 console.log("Conductor eliminado correctamente.");
-
-                setConductores(prevConductores => prevConductores.filter(conductor => conductor.usuario !== idConductor));
+                setConductores((prevConductores) =>
+                    prevConductores.filter((conductor) => conductor.conductor_id !== idConductor)
+                );
             } catch (error) {
                 console.error("Error al eliminar el conductor:", error);
                 alert("Hubo un error al intentar eliminar el conductor. Por favor, inténtalo de nuevo.");
@@ -55,25 +56,28 @@ export default function Conductores() {
     const heads = [
         { id: 'ID Conductor', key: "idConductor", special: "", minWidth: 149 },
         { id: 'Nombre', key: "nombre", special: "", minWidth: 200 },
-        { id: 'Vehiculo', key: "vehiculo", special: "", minWidth: 150 },
+        { id: 'Vehículo', key: "vehiculo", special: "", minWidth: 150 },
         { id: 'Estado', key: "estado", special: "", minWidth: 150 },
         { id: 'Categoría', key: "categoria", special: "", minWidth: 150 },
         { id: 'Actualización', key: "actualizacion", special: "", minWidth: 156 },
         { id: 'Opciones', key: "opciones", special: "", minWidth: 117 },
     ];
 
-    console.log(conductores)
+    const rows = conductores.map((conductor) => {
+        // Obtiene el nombre del estado usando el mapeo `estados`
+        const estadoNombre = estados[conductor.conductor_estado] || "Estado desconocido";
 
-    const rows = conductores.map(conductor => ({
-        idConductor: conductor.usuario,
-        vehiculo: conductor.vehiculo,
-        nombre: conductor.nombre,
-        estado: Array.isArray(conductor.estado) ? conductor.estado : [conductor.estado],
-        categoria: conductor.categoria,
-        actualizacion: conductor.actualizacion,
-    }));
+        return {
+            idConductor: conductor.conductor_id,
+            vehiculo: conductor.vehiculo_placa || "Sin vehículo asignado",
+            nombre: conductor.nombre || "Sin nombre",
+            estado: estadoNombre, // Asigna el nombre del estado
+            categoria: conductor.categoria || "Sin categoría",
+            actualizacion: conductor.actualizacion || "No disponible",
+        };
+    });
 
-    console.log(rows)
+    console.log("Filas de la tabla:", rows); // Depuración para confirmar los valores
 
     return (
         <div className="panelCRUD">
@@ -95,7 +99,7 @@ export default function Conductores() {
                 rows={rows} 
                 onEdit={handleEdit} 
                 onDelete={(idConductor, vehiculo) => {
-                    const conductor = conductores.find(c => c.usuario === idConductor);
+                    const conductor = conductores.find(c => c.conductor_id === idConductor);
                     handleDelete(idConductor, vehiculo, conductor?.estado);
                 }} 
             />

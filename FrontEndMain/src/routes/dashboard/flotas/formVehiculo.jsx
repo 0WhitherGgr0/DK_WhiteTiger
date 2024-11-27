@@ -1,81 +1,87 @@
-import { redirect, useNavigate } from 'react-router-dom';
+import { redirect, useNavigate, useLoaderData } from 'react-router-dom';
 import "../../../styles/panelCRUD.css";
 import { Form } from 'react-router-dom';
 import SelectInputLabel from '../../../components/selectInputLabel';
 import TextInput from '../../../components/textInput';
-
+import TextInputWithValidation from '../../../components/TextInputWithValidation';
 export async function action({ request }) {
   const formData = await request.formData();
   const API_URL = import.meta.env.VITE_API_URL;
+
+  const placa = formData.get("placa");
+  const placaRegex = /^[A-Z]{3}-\d{3}$/;
+  if (!placaRegex.test(placa)) {
+    return { success: false, error: "El formato de la placa debe ser: AAA-123" };
+  }
+
   const data = {
-    marca: formData.get("marca"),
+    vehiculo_marca: formData.get("marca"),
     modelo: formData.get("modelo"),
-    año_fabricacion: parseInt(formData.get("año_fabricacion"), 10),
-    color: formData.get("color"),
-    placa: formData.get("placa"),
-    soat: formData.get("soat"),
-    maximo_recorrido_diario: formData.get("maximo_recorrido"),
-    maxima_capacidad: formData.get("maxima_capacidad"),
-    capacidad: 0,
+    vehiculo_año_fabri: parseInt(formData.get("año_fabricacion"), 10),
+    vehiculo_color: formData.get("color"),
+    vehiculo_placa: placa,
+    vehiculo_soat: formData.get("soat"),
+    vehiculo_max_dist_dia: formData.get("maximo_recorrido"),
+    vehiculo_capacidad: formData.get("maxima_capacidad"),
     total_recorrido: 0,
     estado: "Inactivo",
   };
-  console.log(data)
+
   try {
     const response = await fetch(`${API_URL}/vehiculos/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     });
-    console.log(response)
+
     if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error en el servidor:", errorData);
-        throw new Error("Error al enviar datos");
+      const errorData = await response.json();
+      console.error("Error en el servidor:", errorData);
+      throw new Error("Error al enviar datos");
     }
-    
+
     return redirect("/dashboard/flotas/vehiculos");
-} catch (error) {
+  } catch (error) {
     console.error("Error:", error);
     return { success: false, error: error.message };
+  }
 }
 
-}
 
-const marcas = [
-  { label: 'Marca1', value: 'Marca1' },
-  { label: 'Marca2', value: 'Marca2' },
-  { label: 'Marca3', value: 'Marca3' },
-  { label: 'Marca4', value: 'Marca4' },
-  { label: 'Marca5', value: 'Marca5' },
-  { label: 'Marca6', value: 'Marca6' },
-];
-
-const modelos = [
-  { label: 'Modelo1', value: 'Modelo1' },
-  { label: 'Modelo1', value: 'Modelo2' },
-  { label: 'Modelo3', value: 'Modelo3' },
-  { label: 'Modelo4', value: 'Modelo4' },
-  { label: 'Modelo5', value: 'Modelo5' },
-  { label: 'Modelo6', value: 'Modelo6' },
-];
-
-const colores = [
-  { label: 'Color1', value: 'Color1' },
-  { label: 'Color2', value: 'Color2' },
-  { label: 'Color3', value: 'Color3' },
-];
-
+  const soat = [
+    { label: 'Sí', value: '1' },
+    { label: 'No', value: '0' }
+  ];
 
 
 export default function FormVehiculo() {
   const navigate = useNavigate();
+
+  const {colores = [] }= useLoaderData() || {};
+  const {marcas = [] } = useLoaderData() || {};
+  const {modelos = [] } = useLoaderData() || {};
+
+  const modelosoptions = modelos.map(modelo => ({
+    label: modelo.modelo_nombre,
+    value: modelo.modelo_id
+  }));
+
+  const marcasoptions = marcas.map(marca => ({
+    label: marca.marca_nombre,
+    value: marca.marca_id
+  }));
+
+  const coloresOptions = colores.map(color => ({
+    label: color.color_nombre,
+    value: color.color_id 
+  }));
 
   function handleKeyDown(event) {
     if (event.keyCode === 13) {
       event.preventDefault();
     }
   }
+  const validateDecimal = (value) => /^\d*(\.\d{0,2})?$/.test(value);
 
   return (
     <div className="panelCRUD">
@@ -88,14 +94,14 @@ export default function FormVehiculo() {
           <Form method="post" onKeyDown={handleKeyDown}>
             <SelectInputLabel 
               containerClass="panelCRUD_formInput"
-              options={marcas} 
+              options={marcasoptions} 
               info="Marca" 
               name="marca" 
               placeholder="Seleccionar marca" 
             />
             <SelectInputLabel 
               containerClass="panelCRUD_formInput"
-              options={modelos} 
+              options={modelosoptions} 
               info="Modelo" 
               name="modelo" 
               placeholder="Seleccionar modelo" 
@@ -106,39 +112,49 @@ export default function FormVehiculo() {
               name="año_fabricacion" 
               placeholder="2022" 
               type="number" 
+              validate={(value) => /^\d{0,4}$/.test(value)} 
+              onChange={({ target: { value } }) => {
+                if (/^\d{0,4}$/.test(value)) {
+                  setAnoFabricacion(value);
+                }
+              }}
             />
             <SelectInputLabel 
               containerClass="panelCRUD_formInput"
-              options={colores} 
+              options={coloresOptions} 
               info="Color" 
               name="color" 
               placeholder="Seleccionar color" 
             />
-            <TextInput 
+            <TextInputWithValidation
               containerClass="panelCRUD_formInput"
-              info="Placa" 
-              name="placa" 
-              placeholder="API-123" 
+              info="Placa"
+              name="placa"
+              placeholder="AAA-123"
             />
-            <TextInput 
+            <SelectInputLabel 
               containerClass="panelCRUD_formInput"
+              options={soat} 
               info="SOAT" 
               name="soat" 
-              placeholder="Número de SOAT" 
+              placeholder="Seleccionar" 
             />
             <TextInput 
               containerClass="panelCRUD_formInput"
               info="Máximo Recorrido" 
               name="maximo_recorrido"
-              type='number'
+              placeholder='Ej: 100.00'
+              type='text'
               step="100" 
+              validate={validateDecimal}
             /> 
             <TextInput 
               containerClass="panelCRUD_formInput"
               info="Máxima Capacidad" 
               name="maxima_capacidad" 
               placeholder="Ej: 4.5" 
-              type="number" 
+              type="text"
+              validate={validateDecimal} 
             />
             <div className="panelCRUD_buttonGroup">
               <button type="reset" onClick={() => navigate(-1)}>

@@ -58,16 +58,15 @@ export default function Pedidos() {
   
   const [pedidos, setPedidos] = useState(initialPedidos)
 
-  const rows = pedidos.map((pedido) => (
-    {
-        peso: pedido.peso_total,
-        volumen: pedido.volumen,
-        estado: Array.isArray(pedido.estado) ? pedido.estado : [pedido.estado],
+    const rows = pedidos.map((pedido) => ({
         idPedido: pedido.pedido_id,
-        latitud: pedido.latitud,
-        longitud: pedido.longitud
-    }
-  ));  
+        estado: pedido.estado, // Asegúrate de que este campo viene correctamente mapeado
+        peso: pedido.pedido_peso,
+        volumen: pedido.pedido_volumen,
+        latitud: pedido.latitud, // Cambiado para coincidir con los datos del loader
+        longitud: pedido.longitud, // Cambiado para coincidir con los datos del loader
+    }));
+
 
   return (
       <div className="panelCRUD">

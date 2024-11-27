@@ -7,7 +7,7 @@ from .models import (
 class EstadoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Estado
-        fields = '__all__'
+        fields = ['estado_id', 'estado_nombre']
 
 class RolUsuarioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,7 +32,7 @@ class ClienteSerializer(serializers.ModelSerializer):
 class MarcaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Marca
-        fields = '__all__'
+        fields = ['marca_id', 'marca_nombre']
 
 class ModeloSerializer(serializers.ModelSerializer):
     class Meta:
@@ -45,6 +45,18 @@ class ColorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class VehiculoSerializer(serializers.ModelSerializer):
+    vehiculo_marca = MarcaSerializer(read_only=True)
+    vehiculo_estado = EstadoSerializer(read_only=True)
+    vehiculo_estado_id = serializers.PrimaryKeyRelatedField(
+        source='vehiculo_estado', read_only=True
+    )
+    vehiculo_color_id = serializers.PrimaryKeyRelatedField(
+        source='vehiculo_color', read_only=True
+    )
+    vehiculo_marca_id = serializers.PrimaryKeyRelatedField(
+        source='vehiculo_marca', read_only=True
+    )
+
     class Meta:
         model = Vehiculo
         fields = '__all__'
