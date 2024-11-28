@@ -14,4 +14,4 @@ export default function SideBar({routes}){
             </div>
         </div>
     )
-}
+} 
