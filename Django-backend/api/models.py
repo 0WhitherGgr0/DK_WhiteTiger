@@ -1,4 +1,6 @@
 from django.db import models 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Estado(models.Model):
     estado_id = models.AutoField(primary_key=True) 
@@ -68,7 +70,6 @@ class Vehiculo(models.Model):
     vehiculo_modelo = models.ForeignKey(Modelo, on_delete=models.SET_NULL, null=True, blank=True)
     vehiculo_color = models.ForeignKey(Color, on_delete=models.SET_NULL, null=True, blank=True)
     vehiculo_año_fabri = models.PositiveSmallIntegerField(null=True, blank=True)
-    vehiculo_estado = models.ForeignKey(Estado, on_delete=models.SET_NULL, null=True, blank=True)
     vehiculo_max_dist_dia = models.DecimalField(max_digits=8, decimal_places=2, null=False, blank=False)
     vehiculo_capacidad = models.DecimalField(max_digits=8, decimal_places=2, null=False, blank=False)
     vehiculo_reg = models.DateField(null=False, blank=False, auto_now_add=True)
@@ -105,7 +106,6 @@ class Ubicacion(models.Model):
     def __str__(self):
         return self.referencia
 
-
 class Usuario(models.Model):
     usuario_id = models.AutoField(primary_key=True)  
     usuario_nombre = models.CharField(max_length=255, null=False, blank=False) 
@@ -118,11 +118,11 @@ class Usuario(models.Model):
         on_delete=models.SET_NULL, 
         null=True, 
         blank=True,
-        default=lambda: RolUsuario.objects.get(rol_nombre="conductor").rol_tipo
+        default=1
     )
     usuario_doc = models.ForeignKey(DocumentoUsuario, on_delete=models.SET_NULL, null=True, blank=True)  
     usuario_telefono = models.CharField(max_length=11, null=True, blank=True)  
-    usuario_estado = models.ForeignKey(Estado, on_delete=models.SET_NULL, null=True, blank=True)
+    usuario_estado = models.ForeignKey(Estado, on_delete=models.SET_NULL, null=True, blank=True, default=10)
     usuario_registro = models.DateField(auto_now_add=True, null=False, blank=False)  
 
     def __str__(self):
@@ -147,7 +147,7 @@ class Pedido(models.Model):
     pedido_registro = models.DateField(auto_now_add=True, null=False, blank=False)  
     ubicacion_id = models.ForeignKey(Ubicacion, on_delete=models.CASCADE)  
     pedido_peso = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False) 
-    pedido_estado = models.ForeignKey(Estado, on_delete=models.SET_NULL, null=True, blank=True)  
+    pedido_estado = models.ForeignKey(Estado, on_delete=models.SET_NULL, null=True, blank=True, default=1)  
     pedido_volumen = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False)  
     pedido_precio = models.DecimalField(max_digits=8, decimal_places=2, null=False, blank=False)  
     pedido_fallos = models.IntegerField(null=False, blank=False, default=0)  
@@ -167,6 +167,17 @@ class Linea(models.Model):
     def __str__(self):
         return f"Linea de Pedido {self.pedido_id}"
     
+class RegistroVehiculo(models.Model):
+    vehiculo_id = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)  
+    estado_id = models.ForeignKey(Estado, on_delete=models.SET_NULL, null=True, blank=True)  
+    registro = models.DateField(auto_now_add=True, null=False, blank=False)  
+
+    class Meta:
+        unique_together = ('vehiculo_id', 'estado_id')
+
+    def __str__(self):
+        return f"Registro Estado Conductor {self.vehiculo_id}"
+
 class Recorrido(models.Model):
     recorrido_id = models.AutoField(primary_key=True)  
     conductor_id = models.ForeignKey(Conductor, on_delete=models.CASCADE)  
@@ -192,3 +203,15 @@ class Envio(models.Model):
 
     def __str__(self):
         return f"Envio {self.envio_id}"
+
+@receiver(post_save, sender=Vehiculo)
+def crearEstadosVehiculo(sender, instance, created, **kwargs):
+    if created: 
+        RegistroVehiculo.objects.create(
+            vehiculo_id = instance.vehiculo_placa,
+            estado_id = 6
+        )
+        RegistroVehiculo.objects.create(
+            vehiculo_id = instance.vehiculo_placa,
+            estado_id = 9
+        )
