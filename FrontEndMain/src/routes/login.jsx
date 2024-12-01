@@ -7,7 +7,7 @@ import userSVG from "../assets/user.svg";
 import { useUser } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { encryptData } from '../context/cryptoConfig';
+// import { encryptData } from '../context/cryptoConfig'; //Se comenta para deshabilitar la encriptación
 
 import React, { useState, useEffect } from 'react';
 
@@ -20,7 +20,7 @@ export default function Login() {
     const [usuario_apellido, setApellido] = useState('');
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
-    const [salt, setSalt] = useState(null); 
+    // const [salt, setSalt] = useState(null);  //Se comenta para deshabilitar la encriptación
     const { setUserId } = useUser();
     const [usuario_fecha_nac, setDate] = useState('');
     const [usuario_telefono, setTelefono] = useState('');
@@ -30,40 +30,55 @@ export default function Login() {
     useEffect(() => {
         if (isAuthenticated()) {
             navigate('/dashboard');
-        } else {
-            getSaltFromBackend();
-        }
+        } 
+
+        // else {
+        //     getSaltFromBackend();
+        // }
+
     }, [isAuthenticated, navigate]);
 
-    const getSaltFromBackend = async () => {
-        try {
-            const response = await fetch(`${API_URL}/generate-key`);
-            const data = await response.json();
-            setSalt(data.salt); 
-        } catch (error) {
-            console.error("Error al obtener el salt del backend:", error);
-            setError("No se pudo conectar con el servidor");
-        }
-    };
 
+    //Se comenta para deshabilitar la encriptación ********************************
+    // const getSaltFromBackend = async () => {
+    //     try {
+    //         const response = await fetch(`${API_URL}/generate-key`);
+    //         const data = await response.json();
+    //         setSalt(data.salt); 
+    //     } catch (error) {
+    //         console.error("Error al obtener el salt del backend:", error);
+    //         setError("No se pudo conectar con el servidor");
+    //     }
+    // };
+    // *****************************************************************************
     const handleSubmit = async () => {
         try {
-            if (!salt) {
-                setError("Error: No se pudo obtener el salt");
-                return;
-            }
+            // if (!salt) {
+            //     setError("Error: No se pudo obtener el salt");
+            //     return;
+            // }
     
             const endpoint = isLogin
                 ? `${API_URL}/login/`
                 : `${API_URL}/register/`;
     
-            // Encriptar el password antes de enviarlo al backend usando el salt almacenado
-            const encryptedPassword = await encryptData({ usuario_contraseña }, salt);
-            console.log("Password encriptado:", encryptedPassword);
+            // CRIFRADO************************************************************
+
+            // const encryptedPassword = await encryptData({ usuario_contraseña }, salt);
+            // console.log("Password encriptado:", encryptedPassword);
+            // const body = isLogin
+            //     ? { usuario_email, usuario_contraseña: encryptedPassword }
+            //     : { usuario_nombre, usuario_apellido, usuario_fecha_nac, usuario_telefono,usuario_email, usuario_contraseña: encryptedPassword };
+
+            //*FIN CIFRADO**********************************************************
+
+            // Sin cifrado
             const body = isLogin
-                ? { usuario_email, usuario_contraseña: encryptedPassword }
-                : { usuario_nombre, usuario_apellido, usuario_fecha_nac, usuario_telefono,usuario_email, usuario_contraseña: encryptedPassword };
-    
+            ? { usuario_email, usuario_contraseña }
+            : { usuario_nombre, usuario_apellido, usuario_fecha_nac, usuario_telefono, usuario_email, usuario_contraseña };
+            // **********************************************************************
+
+
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
