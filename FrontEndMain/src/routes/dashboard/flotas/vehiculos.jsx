@@ -4,19 +4,17 @@ import TableCrud from "../../../components/tableCrud";
 import { useNavigate, useLoaderData } from "react-router-dom";
 
 const heads = [
-    { id: "Placa Vehicular", key: "placa", special: "", minWidth: 149 },
+    { id: "Placa Vehicular", key: "placa", special: "", minWidth: 80 },
     { id: "Capacidad Usada", key: "capacidad", special: "special", minWidth: 112 },
     { id: "Maxima Capacidad", key: "maxCapacidad", special: "special", minWidth: 112 },
     { id: "Maxixmo Recorrido", key: "maxRecorrido", special: "special", minWidth: 112 },
     { id: "Estado", key: "estado", special: "", minWidth: 150 },
-    { id: "Ubicación", key: "ubicacion", special: "special", minWidth: 145 },
-    { id: "Actualización", key: "actualizacion", special: "special", minWidth: 156 },
     { id: "Opciones", key: "opciones", special: "", minWidth: 117 },
 ];
 
 export default function Vehiculos() {
     const navigate = useNavigate();
-    const { vehiculos: initialVehiculos = [] } = useLoaderData();
+    const { vehiculos: initialVehiculos = []} = useLoaderData();
 
     // Crear las filas de la tabla
     const rows = initialVehiculos.map((vehiculo) => ({
@@ -25,8 +23,6 @@ export default function Vehiculos() {
         maxCapacidad: vehiculo.vehiculo_max_dist_dia,
         maxRecorrido: vehiculo.vehiculo_max_dist_dia,
         estado: vehiculo.estado_nombre,
-        color: vehiculo.color_nombre,
-        marca: vehiculo.marca_nombre,
         usuario: vehiculo.usuario_asociado,
         opciones: vehiculo.estado_nombre === "Inactivo",
       }));

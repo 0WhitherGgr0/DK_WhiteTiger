@@ -38,11 +38,11 @@ export async function action({ request }) {
   }
 
   const dataP = {
-    estado: "Almacen",
-    cliente: 1,
-    peso_total: formData.get("peso_total"),
-    ubicacion: ubID,
-    volumen: formData.get("volumen"),
+    cliente_id: 1,
+    pedido_peso: formData.get("peso_total"),
+    ubicacion_id: ubID,
+    pedido_volumen: formData.get("volumen"),
+    pedido_precio: 100,
   };
 
   try {

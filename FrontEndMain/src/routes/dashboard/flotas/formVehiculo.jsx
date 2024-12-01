@@ -16,15 +16,13 @@ export async function action({ request }) {
 
   const data = {
     vehiculo_marca: formData.get("marca"),
-    modelo: formData.get("modelo"),
+    vehiculo_modelo: formData.get("modelo"),
     vehiculo_año_fabri: parseInt(formData.get("año_fabricacion"), 10),
     vehiculo_color: formData.get("color"),
     vehiculo_placa: placa,
     vehiculo_soat: formData.get("soat"),
     vehiculo_max_dist_dia: formData.get("maximo_recorrido"),
     vehiculo_capacidad: formData.get("maxima_capacidad"),
-    total_recorrido: 0,
-    estado: "Inactivo",
   };
 
   try {
@@ -33,6 +31,8 @@ export async function action({ request }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
+
+    console.log(response);
 
     if (!response.ok) {
       const errorData = await response.json();

@@ -8,8 +8,8 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Conductores() {
     const navigate = useNavigate();
-    const { conductores: initialConductores = [], estados = {} } = useLoaderData();
-    console.log("Estados:", estados);
+    const { conductores: initialConductores = []} = useLoaderData();
+
 
     const [conductores, setConductores] = useState(initialConductores);
 
@@ -54,26 +54,21 @@ export default function Conductores() {
     };
 
     const heads = [
-        { id: 'ID Conductor', key: "idConductor", special: "", minWidth: 149 },
-        { id: 'Nombre', key: "nombre", special: "", minWidth: 200 },
-        { id: 'Vehículo', key: "vehiculo", special: "", minWidth: 150 },
-        { id: 'Estado', key: "estado", special: "", minWidth: 150 },
-        { id: 'Categoría', key: "categoria", special: "", minWidth: 150 },
-        { id: 'Actualización', key: "actualizacion", special: "", minWidth: 156 },
+        { id: 'ID Conductor', key: "idConductor", special: "", minWidth: 100 },
+        { id: 'Nombre', key: "nombre", special: "", minWidth: 100 },
+        { id: 'Vehículo', key: "vehiculo", special: "", minWidth: 100 },
+        { id: 'Estado', key: "estado", special: "", minWidth: 300 },
         { id: 'Opciones', key: "opciones", special: "", minWidth: 117 },
     ];
 
     const rows = conductores.map((conductor) => {
         // Obtiene el nombre del estado usando el mapeo `estados`
-        const estadoNombre = estados[conductor.conductor_estado] || "Estado desconocido";
 
         return {
             idConductor: conductor.conductor_id,
             vehiculo: conductor.vehiculo_placa || "Sin vehículo asignado",
             nombre: conductor.nombre || "Sin nombre",
-            estado: estadoNombre, // Asigna el nombre del estado
-            categoria: conductor.categoria || "Sin categoría",
-            actualizacion: conductor.actualizacion || "No disponible",
+            estado: conductor.conductor_estado || "Desconocido",
         };
     });
 
