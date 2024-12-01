@@ -10,7 +10,6 @@ export default function Conductores() {
     const navigate = useNavigate();
     const { conductores: initialConductores = []} = useLoaderData();
 
-
     const [conductores, setConductores] = useState(initialConductores);
 
     const handleEdit = (idConductor) => {

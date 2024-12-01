@@ -15,7 +15,6 @@ export async function action({ request }) {
   };
   
   console.log("Datos enviados al backend:", data);
-  
   try {
       const response = await fetch(`${API_URL}/conductores/`, {
           method: "POST",
@@ -24,11 +23,58 @@ export async function action({ request }) {
       });
 
       if (!response.ok) throw new Error("Error al enviar datos");
-      return redirect("/dashboard/flotas/conductores");
   } catch (error) {
       console.error("Error:", error);
       return { success: false, error: error.message };
   }
+
+  
+  const responseEstados = await fetch(`${API_URL}/vehiculosEstados/${data.vehiculo_placa}`);
+  const misEstados = await responseEstados.json();
+  console.log("Mis Estados", misEstados)
+  let idEstadoChange;
+  
+  misEstados.forEach(estado => {
+
+    if(estado.estado_id == 6){
+      idEstadoChange = estado.id;
+    }
+  });
+  console.log("idEstadoChange", idEstadoChange)
+
+  const usuarioChange = await fetch(`${API_URL}/usuarios/${data.usuario_id}/`, {
+    method: 'PATCH',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({usuario_rol: 2}),
+  });
+  
+
+  const responseChange = await fetch(`${API_URL}/registros-vehiculo/${idEstadoChange}/`, {
+      method: 'PATCH',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({estado_id: 2}),
+  });
+  
+
+  const newData = {
+    estado_id: 7, 
+    vehiculo_placa: formData.get("id_vehiculo")
+  }
+
+  const addChange = await fetch(`${API_URL}/registros-vehiculo/`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newData),
+  });
+
+  return redirect("/dashboard/flotas/conductores");
+
 }
 
 export default function FormConductor() {
@@ -36,7 +82,7 @@ export default function FormConductor() {
     const actionData = useActionData();
     const { vehiculos = [], empleados = [] } = useLoaderData() || {};
     const { userId } = useUser();
-  console.log(vehiculos)
+
     const vehiculoOptions = vehiculos
         .filter(vehiculo => vehiculo.estado_nombre.includes("Sin asignar"))
         .map(vehiculo => ({

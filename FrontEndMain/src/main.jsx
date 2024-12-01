@@ -20,7 +20,7 @@ import RoleRoute from "./routes/PrivateRoute";
 import FormConductor from "./routes/dashboard/flotas/formConductores";
 import { action as conductorCreate } from "./routes/dashboard/flotas/formConductores";
 import { loaderVehiculosYUsuarios } from "./routes/loaders/loaderVehiculos";
-import FormConductorEdit, { loader as formConductorEditLoader, action } from './routes/dashboard/flotas/formConductoresEdit';
+import FormConductorEdit, { action } from './routes/dashboard/flotas/formConductoresEdit';
 import FormVehiculoEdit, { loader as formVehiculoEditLoader, actionv }  from "./routes/dashboard/flotas/formVehiculoEdit";
 
 import Solicitudes from "./routes/dashboard/Solicitudes/solicitudes";
@@ -155,7 +155,7 @@ const router = createBrowserRouter([
                 <FormConductorEdit />
               </PrivateRoute>
             ),
-            loader: formConductorEditLoader,
+            loader: loaderVehiculosYUsuarios,
             action: action
           },
           {

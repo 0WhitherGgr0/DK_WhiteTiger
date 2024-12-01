@@ -13,86 +13,121 @@ export async function action({ request, params }) {
 
   // Obtener y preparar los datos del formulario
   const data = {
-    usuario_id: parseInt(formData.get("usuario_id"), 10),
     vehiculo_placa: formData.get("vehiculo_placa"),
-    conductor_brevete: formData.get("conductor_brevete"),
-    conductor_estado: parseInt(formData.get("conductor_estado"), 10),
   };
 
   console.log("Datos del formulario enviados:", data);
 
   // Validar datos antes de enviarlos al backend
-  if (!data.usuario_id || !data.vehiculo_placa || !data.conductor_brevete || !data.conductor_estado) {
+  if (!data.vehiculo_placa) {
     return { success: false, error: "Todos los campos son obligatorios." };
   }
 
+
+  let idVehiculoAntiguo;
   try {
+    
+    const responseAux = await fetch(`${API_URL}/conductores/${idConductor}/`);
+    const responseActual = await responseAux.json();
+    idVehiculoAntiguo = responseActual.vehiculo_placa;
+    
     const response = await fetch(`${API_URL}/conductores/${idConductor}/`, {
-      method: "PUT",
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
+
+    
 
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`Error al actualizar el conductor. Estado: ${response.status}, Error: ${errorText}`);
     }
     alert("Conductor actualizado correctamente.");
-    return redirect("/dashboard/flotas/conductores");
+    
   } catch (error) {
     console.error("Error en action:", error);
     return { success: false, error: error.message };
   }
-}
 
-// Función loader para cargar los datos necesarios
-export async function loader({ params }) {
-  const { idConductor } = params;
-
-  try {
-    const conductorResponse = await fetch(`${API_URL}/conductores/${idConductor}/`);
-    if (!conductorResponse.ok) {
-      throw new Error('Error al cargar los datos del conductor');
+  console.log("Antiguo", idVehiculoAntiguo)
+  const responseEstadosAntiguos = await fetch(`${API_URL}/vehiculosEstados/${idVehiculoAntiguo}`);
+  const misEstadosAntiguos = await responseEstadosAntiguos.json();
+  console.log("Mis Estados", misEstadosAntiguos)
+  let idEstadoOldChange, idEstadoDelete;
+  
+  misEstadosAntiguos.forEach(estado => {
+    if(estado.estado_id == 2){
+      idEstadoOldChange = estado.id;
     }
-    const conductor = await conductorResponse.json();
-
-    const vehiculosResponse = await fetch(`${API_URL}/vehiculos/`);
-    if (!vehiculosResponse.ok) {
-      throw new Error('Error al cargar los datos de vehículos');
+    if(estado.estado_id == 7){
+      idEstadoDelete = estado.id
     }
-    const vehiculos = await vehiculosResponse.json();
+  });
 
-    const estadosResponse = await fetch(`${API_URL}/estados/`);
-    if (!estadosResponse.ok) {
-      throw new Error('Error al cargar los datos de estados');
+  const responseOldChange = await fetch(`${API_URL}/registros-vehiculo/${idEstadoOldChange}/`, {
+    method: 'PATCH',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({estado_id: 6}),
+  });
+  console.log("Cambiar estado", responseOldChange);
+
+  const responseOldDelete = await fetch(`${API_URL}/registros-vehiculo/${idEstadoDelete}/`, {
+    method: 'DELETE'
+  });
+  console.log("Eliminar estado", responseOldChange);
+
+
+  const responseEstados = await fetch(`${API_URL}/vehiculosEstados/${data.vehiculo_placa}`);
+  const misEstados = await responseEstados.json();
+  console.log("Mis Estados", misEstados)
+  let idEstadoChange;
+  
+  misEstados.forEach(estado => {
+    if(estado.estado_id == 6){
+      idEstadoChange = estado.id;
     }
-    const estados = await estadosResponse.json();
-
-    return { conductor, vehiculos, estados };
-  } catch (error) {
-    console.error("Error en loader:", error);
-    throw error;
+  });
+  
+  const responseChange = await fetch(`${API_URL}/registros-vehiculo/${idEstadoChange}/`, {
+      method: 'PATCH',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({estado_id: 2}),
+  });
+  
+  const newData = {
+    estado_id: 7, 
+    vehiculo_placa: formData.get("vehiculo_placa")
   }
+
+  const addChange = await fetch(`${API_URL}/registros-vehiculo/`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newData),
+  });
+
+  return redirect("/dashboard/flotas/conductores");
 }
+
 
 // Componente principal
 export default function FormConductorEdit() {
   const navigate = useNavigate();
-  const { conductor, vehiculos, estados } = useLoaderData();
+  const { conductor, vehiculos = []} = useLoaderData();
   const actionData = useActionData();
-
-  // Construir opciones de estado utilizando los IDs
-  const estadoOptions = estados.map((estado) => ({
-    label: estado.estado_nombre,
-    value: estado.estado_id,
-  }));
 
   // Filtrar vehículos con estado "Activo" y construir opciones con marca y placa
   const vehiculoOptions = vehiculos
-    .filter((vehiculo) => vehiculo.vehiculo_estado?.estado_nombre === "Activo")
-    .map((vehiculo) => ({
-      label: `${vehiculo.vehiculo_marca?.marca_nombre || "Sin marca"} - ${vehiculo.vehiculo_placa}`,
-      value: vehiculo.vehiculo_placa,
+        .filter(vehiculo => vehiculo.estado_nombre.includes("Sin asignar"))
+        .map(vehiculo => ({
+            label: `${vehiculo.marca_nombre} - ${vehiculo.vehiculo_placa}`,
+            value: vehiculo.vehiculo_placa 
     }));
 
   // Estado inicial del formulario
@@ -153,28 +188,6 @@ export default function FormConductorEdit() {
               name="vehiculo_placa"
               placeholder="Seleccionar vehículo"
               value={formData.vehiculo_placa}
-              onChange={handleChange}
-              required
-            />
-
-            <SelectInputLabel
-              containerClass="panelCRUD_formInput"
-              options={estadoOptions}
-              info="Estado"
-              name="conductor_estado"
-              placeholder="Seleccionar estado"
-              value={formData.conductor_estado}
-              onChange={handleChange}
-              required
-            />
-
-            <TextInput
-              containerClass="panelCRUD_formInput"
-              info="Brevete"
-              name="conductor_brevete"
-              placeholder="Ej: ABC-123"
-              validate={(value) => /^\d{0,9}$/.test(value)}
-              value={formData.conductor_brevete}
               onChange={handleChange}
               required
             />
