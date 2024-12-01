@@ -78,15 +78,17 @@ def register(request):
         email = data.get('usuario_email')
         fecha_nac = data.get('usuario_fecha_nac')        
         telefono = data.get('usuario_telefono')
-        print(data)
-        print("/////////////////////////////")
-        print(nombre, apellido, email, fecha_nac, telefono)
 
         # Descifrar y hashear la contraseña
-        decrypted_data = decrypt_data(data['usuario_contraseña'])
-        password = decrypted_data['usuario_contraseña'].encode('utf-8')
-        hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
+        # decrypted_data = decrypt_data(data['usuario_contraseña'])
+        # password = decrypted_data['usuario_contraseña'].encode('utf-8')
+        # hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
 
+        #Borrar esta parte
+        password = data.get('usuario_contraseña').encode('utf-8')
+        hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
+        #****************************************************
+        
         # Verificar si el usuario ya existe
         if Usuario.objects.filter(usuario_email=email).exists():
             return Response({"message": "Usuario ya registrado"}, status=status.HTTP_400_BAD_REQUEST)
@@ -121,17 +123,19 @@ def login(request):
     try:
         # Verificar que los datos requeridos están presentes
         email = data.get('usuario_email')
-        encrypted_password = data.get('usuario_contraseña')
+        
+        password = data.get('usuario_contraseña').encode('utf-8')
+        # encrypted_password = data.get('usuario_contraseña')
 
-        if not email or not encrypted_password:
+        if not email or not password: # encrypted_password:
             return Response({"message": "Faltan campos obligatorios"}, status=status.HTTP_400_BAD_REQUEST)
 
         # Descifrar la contraseña
-        decrypted_data = decrypt_data(encrypted_password)
-        if not isinstance(decrypted_data, dict) or 'usuario_contraseña' not in decrypted_data:
-            return Response({"message": "Error al descifrar la contraseña"}, status=status.HTTP_400_BAD_REQUEST)
+        # decrypted_data = decrypt_data(encrypted_password)
+        # if not isinstance(decrypted_data, dict) or 'usuario_contraseña' not in decrypted_data:
+        #     return Response({"message": "Error al descifrar la contraseña"}, status=status.HTTP_400_BAD_REQUEST)
 
-        password = decrypted_data['usuario_contraseña'].encode('utf-8')
+        # password = decrypted_data['usuario_contraseña'].encode('utf-8')
 
         # Verificar si el usuario existe y si la contraseña es correcta
         usuario = Usuario.objects.filter(usuario_email=email).first()
