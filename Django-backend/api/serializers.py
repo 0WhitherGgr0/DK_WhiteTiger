@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import (
     Cliente, Producto, Ubicacion, Pedido, Linea, Usuario, Vehiculo, Conductor, Recorrido, Envio,
-    Estado, RolUsuario, TipoDocumento, DocumentoUsuario, Marca, Modelo, Color, RegistroVehiculo
+    Estado, RolUsuario, TipoDocumento, DocumentoUsuario, Marca, Modelo, Color, RegistroVehiculo, RegistroConductor
 )
 
 class EstadoSerializer(serializers.ModelSerializer):
@@ -45,15 +45,6 @@ class ColorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class VehiculoSerializer(serializers.ModelSerializer):
-    vehiculo_marca = MarcaSerializer(read_only=True)
-    vehiculo_estado = EstadoSerializer(read_only=True)
-    vehiculo_color_id = serializers.PrimaryKeyRelatedField(
-        source='vehiculo_color', read_only=True
-    )
-    vehiculo_marca_id = serializers.PrimaryKeyRelatedField(
-        source='vehiculo_marca', read_only=True
-    )
-
     class Meta:
         model = Vehiculo
         fields = '__all__'
@@ -102,3 +93,9 @@ class RegistroVehiculoSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegistroVehiculo
         fields = '__all__'
+
+class RegistroConductorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RegistroConductor
+        fields = '__all__'
+        

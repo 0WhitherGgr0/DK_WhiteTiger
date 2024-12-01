@@ -9,10 +9,9 @@ export async function action({ request }) {
   const API_URL = import.meta.env.VITE_API_URL;
   
   const data = {
-      usuario: formData.get("id_usuario"),  
-      vehiculo: formData.get("id_vehiculo"),
-      estado: "Inactivo",
-      breve: formData.get("breve"), 
+      usuario_id: formData.get("id_usuario"),  
+      vehiculo_placa: formData.get("id_vehiculo"),
+      conductor_brevete: formData.get("breve"), 
   };
   
   console.log("Datos enviados al backend:", data);
@@ -24,12 +23,6 @@ export async function action({ request }) {
           body: JSON.stringify(data)
       });
 
-      const response2 = await fetch(`${API_URL}/vehiculos/${formData.get("id_vehiculo")}/` ,{
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({estado: "Activo"})
-      })
-      
       if (!response.ok) throw new Error("Error al enviar datos");
       return redirect("/dashboard/flotas/conductores");
   } catch (error) {
@@ -41,19 +34,17 @@ export async function action({ request }) {
 export default function FormConductor() {
     const navigate = useNavigate();
     const actionData = useActionData();
-    const { vehiculos = [], usuarios = [] } = useLoaderData() || {};
+    const { vehiculos = [], empleados = [] } = useLoaderData() || {};
     const { userId } = useUser();
-
-
-
+  console.log(vehiculos)
     const vehiculoOptions = vehiculos
-        .filter(vehiculo => vehiculo.estado === "Inactivo")
+        .filter(vehiculo => vehiculo.estado_nombre.includes("Sin asignar"))
         .map(vehiculo => ({
-            label: `${vehiculo.marca} - ${vehiculo.placa}`,
-            value: vehiculo.placa 
+            label: `${vehiculo.marca_nombre} - ${vehiculo.vehiculo_placa}`,
+            value: vehiculo.vehiculo_placa 
     }));
 
-    const usuarioOptions = usuarios.map(usuario => ({
+    const usuarioOptions = empleados.map(usuario => ({
       label: usuario.usuario_nombre,
       value: usuario.usuario_id 
     }));

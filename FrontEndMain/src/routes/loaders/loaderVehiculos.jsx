@@ -47,6 +47,9 @@ export async function loaderVehiculosYUsuarios() {
             return map;
         }, {});
 
+        const empleados = usuarios.filter(usuario => usuario.usuario_rol === 1);
+        
+
         const usuariosMap = usuarios.reduce((map, usuario) => {
             if (usuario.usuario_id && usuario.usuario_nombre && usuario.usuario_apellido) {
                 map[String(usuario.usuario_id).trim()] = `${usuario.usuario_nombre} ${usuario.usuario_apellido}`;
@@ -54,26 +57,34 @@ export async function loaderVehiculosYUsuarios() {
             return map;
         }, {});
 
+
         // Procesar los vehículos para incluir datos relacionados
-        const vehiculosConDatos = vehiculos.map((vehiculo) => {
-            // Normalizar IDs y manejar casos donde falten datos
-            const estadoId = vehiculo.vehiculo_estado_id ? String(vehiculo.vehiculo_estado_id).trim() : null;
-            const colorId = vehiculo.vehiculo_color_id ? String(vehiculo.vehiculo_color_id).trim() : null;
-            const marcaId = vehiculo.vehiculo_marca_id ? String(vehiculo.vehiculo_marca_id).trim() : null;
-            const usuarioId = vehiculo.usuario_id ? String(vehiculo.usuario_id).trim() : null;
-
-            if (!estadoId) {
-                console.warn(`Vehículo con ID ${vehiculo.vehiculo_id} no tiene estado definido.`);
-            }
-
-            return {
-                ...vehiculo,
-                estado_nombre: estadosMap[estadoId] || "Desconocido",
-                color_nombre: coloresMap[colorId] || "Desconocido",
-                marca_nombre: marcasMap[marcaId] || "Desconocido",
-                usuario_asociado: usuariosMap[usuarioId] || "Sin usuario asociado",
-            };
-        });
+        const vehiculosConDatos = await Promise.all(
+            vehiculos.map(async (vehiculo) => {
+                // Normalizar IDs y manejar casos donde falten datos
+                const colorId = vehiculo.vehiculo_color;
+                const marcaId = vehiculo.vehiculo_marca;
+                const usuarioId = vehiculo.usuario_id;
+        
+                // Obtener los estados del vehículo
+                const misEstadosResponse = await fetch(`${API_URL}/vehiculosEstados/${vehiculo.vehiculo_placa}`);
+                const misEstados = await misEstadosResponse.json();
+                const dataEstados = misEstados.map((estado) => {
+                    return estadosMap[estado.estado_id];
+                });
+        
+                console.log(dataEstados);
+        
+                return {
+                    ...vehiculo,
+                    estado_nombre: dataEstados.length ? dataEstados : "Desconocido",
+                    color_nombre: coloresMap[colorId] || "Desconocido",
+                    marca_nombre: marcasMap[marcaId] || "Desconocido",
+                    usuario_asociado: usuariosMap[usuarioId] || "Sin usuario asociado",
+                };
+            })
+        );
+        
 
         // Logs para depuración
         console.log("Vehículos desde la API:", vehiculos);
@@ -88,6 +99,7 @@ export async function loaderVehiculosYUsuarios() {
             marcas,
             estados,
             modelos,
+            empleados,
         };
     } catch (error) {
         console.error("Error en loaderVehiculosYUsuarios:", error);

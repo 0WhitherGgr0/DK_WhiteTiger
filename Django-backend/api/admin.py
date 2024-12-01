@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import(
     Cliente, Producto, Ubicacion, Pedido, Linea, Usuario, Vehiculo, Conductor, Recorrido, Envio,
-    Estado, RolUsuario, TipoDocumento, DocumentoUsuario, Marca, Modelo, Color, RegistroVehiculo
+    Estado, RolUsuario, TipoDocumento, DocumentoUsuario, Marca, Modelo, Color, RegistroVehiculo, RegistroConductor
 )
 
 # Registra cada modelo en el panel de administración
@@ -100,5 +100,12 @@ class ColorAdmin(admin.ModelAdmin):
 
 @admin.register(RegistroVehiculo)
 class RegistroVehiculoAdmin(admin.ModelAdmin):
-    list_display = ('vehiculo_id','estado_id','registro')
-    search_fields = ('vehiculo_id','estado_id')
+    list_display = ('vehiculo_placa','estado_id','registro')
+    search_fields = ('vehiculo_placa','estado_id')
+
+@admin.register(RegistroConductor)
+class RegistroConductorAdmin(admin.ModelAdmin):
+    list_display = ('conductor_id','estado_id','registro')
+    search_fields = ('conductor_id','estado_id')
+
+    

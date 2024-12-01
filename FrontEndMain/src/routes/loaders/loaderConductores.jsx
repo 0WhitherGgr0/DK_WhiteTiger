@@ -9,7 +9,6 @@ export async function loaderConductores() {
         const conductores = await conductoresResponse.json();
 
         const usuarioIds = [...new Set(conductores.map((conductor) => conductor.usuario_id))];
-        const estadoIds = [...new Set(conductores.map((conductor) => conductor.conductor_estado))];
 
         // Obtener usuarios
         const usuarioResponses = await Promise.all(
@@ -20,12 +19,9 @@ export async function loaderConductores() {
         );
 
         // Obtener estados
-        const estadoResponses = await Promise.all(
-            estadoIds.map((id) => fetch(`${API_URL}/estados/${id}/`))
-        );
-        const estados = await Promise.all(
-            estadoResponses.map((res) => (res.ok ? res.json() : null))
-        );
+
+        const estadoResponses = await fetch(`${API_URL}/estados`);
+        const estados = await estadoResponses.json()
 
         // Crear mapas
         const usuarioMap = usuarios.reduce((map, usuario) => {
@@ -36,19 +32,34 @@ export async function loaderConductores() {
         }, {});
 
         const estadoMap = estados.reduce((map, estado) => {
-            if (estado && estado.estado_id && estado.estado_nombre) {
-                map[estado.estado_id] = estado.estado_nombre;
+            if (estado.estado_id && estado.estado_nombre) {
+                map[String(estado.estado_id).trim()] = estado.estado_nombre;
             }
             return map;
         }, {});
 
         console.log("Estado Map:", estadoMap); // Verifica que se está generando correctamente
 
-        const conductoresCompletos = conductores.map((conductor) => ({
-            ...conductor,
-            nombre: usuarioMap[conductor.usuario_id] || "Desconocido",
-            conductor_estado: conductor.conductor_estado,
-        }));
+        const conductoresCompletos = await Promise.all(
+            conductores.map(async (conductor) => {
+
+                // Obtener los estados del vehículo
+                const misEstadosResponse = await fetch(`${API_URL}/conductoresEstados/${conductor.conductor_id}`);
+                const misEstados = await misEstadosResponse.json();
+                console.log(estadoMap);
+                const dataEstados = misEstados.map((estado) => {
+                    return estadoMap[estado.estado_id];
+                });
+        
+                console.log(dataEstados);
+        
+                return {
+                    ...conductor,
+                    nombre: usuarioMap[conductor.usuario_id] || "Desconocido",
+                    conductor_estado: dataEstados.length ? dataEstados : "Desconocido",
+                };
+            })
+        );
 
         return {
             conductores: conductoresCompletos,

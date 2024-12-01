@@ -168,15 +168,27 @@ class Linea(models.Model):
         return f"Linea de Pedido {self.pedido_id}"
     
 class RegistroVehiculo(models.Model):
-    vehiculo_id = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)  
+    vehiculo_placa = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)  
     estado_id = models.ForeignKey(Estado, on_delete=models.SET_NULL, null=True, blank=True)  
     registro = models.DateField(auto_now_add=True, null=False, blank=False)  
 
     class Meta:
-        unique_together = ('vehiculo_id', 'estado_id')
+        unique_together = ('vehiculo_placa', 'estado_id')
 
     def __str__(self):
-        return f"Registro Estado Conductor {self.vehiculo_id}"
+        return f"Registro Estado Conductor {self.vehiculo_placa}"
+    
+class RegistroConductor(models.Model):
+    conductor_id = models.ForeignKey(Conductor, on_delete=models.CASCADE)  
+    estado_id = models.ForeignKey(Estado, on_delete=models.SET_NULL, null=True, blank=True)  
+    registro = models.DateField(auto_now_add=True, null=False, blank=False)  
+
+    class Meta:
+        unique_together = ('conductor_id', 'estado_id')
+
+    def __str__(self):
+        return f"Registro Estado Conductor {self.conductor_id}"
+
 
 class Recorrido(models.Model):
     recorrido_id = models.AutoField(primary_key=True)  
@@ -206,12 +218,26 @@ class Envio(models.Model):
 
 @receiver(post_save, sender=Vehiculo)
 def crearEstadosVehiculo(sender, instance, created, **kwargs):
+    print(instance)
     if created: 
         RegistroVehiculo.objects.create(
-            vehiculo_id = instance.vehiculo_placa,
-            estado_id = 6
+            vehiculo_placa = instance,
+            estado_id = Estado.objects.get(estado_id = 6)
         )
         RegistroVehiculo.objects.create(
-            vehiculo_id = instance.vehiculo_placa,
-            estado_id = 9
+            vehiculo_placa = instance,
+            estado_id = Estado.objects.get(estado_id = 9)
+        )
+
+@receiver(post_save, sender=Conductor)
+def crearEstadosVehiculo(sender, instance, created, **kwargs):
+    print(instance)
+    if created: 
+        RegistroConductor.objects.create(
+            conductor_id = instance,
+            estado_id = Estado.objects.get(estado_id = 6)
+        )
+        RegistroConductor.objects.create(
+            conductor_id = instance,
+            estado_id = Estado.objects.get(estado_id = 9)
         )

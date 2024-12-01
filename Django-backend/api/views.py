@@ -1,13 +1,17 @@
 from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.generics import ListAPIView
+
 from .models import (
     Cliente, Producto, Ubicacion, Pedido, Linea, Usuario, Vehiculo, Conductor, Recorrido, Envio,
-    Estado, RolUsuario, TipoDocumento, DocumentoUsuario, Marca, Modelo, Color
+    Estado, RolUsuario, TipoDocumento, DocumentoUsuario, Marca, Modelo, Color, RegistroVehiculo, RegistroConductor
 )
 from .serializers import (
     ClienteSerializer, ProductoSerializer, UbicacionSerializer, PedidoSerializer, LineaSerializer,
     UsuarioSerializer, VehiculoSerializer, ConductorSerializer, RecorridoSerializer, EnvioSerializer,
     EstadoSerializer, RolUsuarioSerializer, TipoDocumentoSerializer, DocumentoUsuarioSerializer,
-    MarcaSerializer, ModeloSerializer, ColorSerializer
+    MarcaSerializer, ModeloSerializer, ColorSerializer, RegistroVehiculoSerializer, RegistroConductorSerializer
 )
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -89,9 +93,9 @@ def register(request):
 
         # Buscar el rol "conductor" en la base de datos
         try:
-            rol_conductor = RolUsuario.objects.get(rol_nombre="conductor")
+            rol_conductor = RolUsuario.objects.get(rol_nombre="empleado")
         except RolUsuario.DoesNotExist:
-            return Response({"message": "El rol 'conductor' no existe en la base de datos"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"message": "El rol 'empleado' no existe en la base de datos"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         # Crear un nuevo usuario con valores predeterminados en los campos adicionales
         usuario = Usuario(
@@ -150,10 +154,6 @@ def login(request):
         # Registro detallado del error para depuración
         print(f"Error en el proceso de inicio de sesión: {e}")
         return Response({"message": "Error en el proceso de inicio de sesión, por favor intente nuevamente."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-
-
     
 @api_view(['GET'])
 def generate_key_endpoint(request):
@@ -178,6 +178,27 @@ def create_vehiculo(request):
         return Response({'success': True, 'data': serializer.data}, status=status.HTTP_201_CREATED)
     else:
         return Response({'success': False, 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RegistroConductorID(ListAPIView):
+    serializer_class = RegistroConductorSerializer
+    def get_queryset(self):
+        conductor = self.kwargs['id']
+        return RegistroConductor.objects.filter(conductor_id=conductor)
+
+class RegistroVehiculoPlaca(ListAPIView):
+    serializer_class = RegistroVehiculoSerializer
+    def get_queryset(self):
+        vehiculo = self.kwargs['placa']
+        return RegistroVehiculo.objects.filter(vehiculo_placa=vehiculo)
+
+class RegistroConductorViewSet(viewsets.ModelViewSet):
+    queryset = RegistroConductor.objects.all()
+    serializer_class = RegistroConductorSerializer
+
+class RegistroVehiculoViewSet(viewsets.ModelViewSet):
+    queryset = RegistroVehiculo.objects.all()
+    serializer_class = RegistroVehiculoSerializer
 
 class EstadoViewSet(viewsets.ModelViewSet):
     queryset = Estado.objects.all()

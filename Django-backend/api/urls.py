@@ -1,6 +1,8 @@
 from django.urls import path, include
 from rest_framework import routers
 from . import views
+from .views import RegistroVehiculoPlaca
+from .views import RegistroConductorID
 
 router = routers.DefaultRouter()
 
@@ -22,7 +24,8 @@ router.register(r'vehiculos', views.VehiculoViewSet)
 router.register(r'conductores', views.ConductorViewSet)
 router.register(r'recorridos', views.RecorridoViewSet)
 router.register(r'envios', views.EnvioViewSet)
-
+router.register(r'registros-vehiculo',views.RegistroVehiculoViewSet)
+router.register(r'registros-conductor',views.RegistroConductorViewSet)
 
 # Incluir las rutas registradas en urlpatterns
 urlpatterns = [
@@ -32,4 +35,6 @@ urlpatterns = [
     path('generate-key/', views.generate_key_endpoint, name='generate_key'),
     path('conductores/', views.create_conductor, name='create_conductor'),
     path('vehiculos/', views.create_vehiculo, name='create_vehiculo'),
+    path('vehiculosEstados/<str:placa>/', RegistroVehiculoPlaca.as_view(), name='vehiculo_estados'),
+    path('conductoresEstados/<str:id>/', RegistroConductorID.as_view(), name='conductor_estados')
 ]
