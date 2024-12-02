@@ -40,6 +40,7 @@ import VehiculosActivos from "./routes/dashboard/flotas/vehiculosActivos";
 
 import { loaderPeticiones } from "./routes/loaders/loaderPeticiones";
 import { loaderRecorridos } from "./routes/loaders/loaderRecorridos";
+import { loaderEnvios } from "./routes/loaders/loaderEnvios";
 
 const router = createBrowserRouter([
   {
@@ -73,7 +74,8 @@ const router = createBrowserRouter([
               <PrivateRoute allowedRoles={['admin', 'conductor']}>
                 <Ordenes />
               </PrivateRoute>
-            )
+            ),
+            loader: loaderEnvios
           },
           {
             path: "pedidos",
