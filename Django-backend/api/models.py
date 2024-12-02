@@ -122,7 +122,7 @@ class Usuario(models.Model):
     )
     usuario_doc = models.ForeignKey(DocumentoUsuario, on_delete=models.SET_NULL, null=True, blank=True)  
     usuario_telefono = models.CharField(max_length=11, null=True, blank=True)  
-    usuario_estado = models.ForeignKey(Estado, on_delete=models.SET_NULL, null=True, blank=True, default=10)
+    usuario_estado = models.ForeignKey(Estado, on_delete=models.SET_NULL, null=True, blank=True, default=1)
     usuario_registro = models.DateField(auto_now_add=True, null=False, blank=False)  
 
     def __str__(self):
