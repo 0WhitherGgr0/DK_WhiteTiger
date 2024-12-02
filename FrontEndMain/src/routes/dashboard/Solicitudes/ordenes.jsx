@@ -7,17 +7,21 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Conductores() {
     const { envios: initialEnvios = []} = useLoaderData();
-
+    const navigate = useNavigate();
     const [envios, setEnvios] = useState(initialEnvios);
     console.log(envios)
     const heads = [
         { id: 'ID', key: "id", special: "", minWidth: 100 },
         { id: 'Estado', key: "estado", special: "", minWidth: 100 },
         { id: 'Registro', key: "registro", special: "", minWidth: 100 },
-        { id: 'Recorrido ID', key: "recorrido", special: "", minWidth: 300 },
+        { id: 'Recorrido ID', key: "idRuta", special: "", minWidth: 300 },
         { id: 'Pedido ID', key: "pedido", special: "", minWidth: 117 },
-        { id: 'Opciones', key: "opciones", special: "", minWidth: 117 },
+        { id: 'Ruta', key: "mapa", special: "", minWidth: 117 },
     ];
+
+    const handleGo = (idRuta) => {
+        navigate(`/dashboard/ruta/${idRuta}`);
+    };
 
     const rows = envios.map((envio) => {
         // Obtiene el nombre del estado usando el mapeo `estados`
@@ -25,7 +29,7 @@ export default function Conductores() {
             id: envio.envio_id,
             estado: envio.estado_nombre || "Desconocido",
             registro: envio.envio_registro || "Sin vehículo asignado",
-            recorrido: envio.recorrido_id || "Sin nombre",
+            idRuta: envio.recorrido_id || "Sin nombre",
             pedido: envio.pedido_id || "Desconocido",
         };
     });
@@ -40,6 +44,7 @@ export default function Conductores() {
             <TableCrud 
                 heads={heads} 
                 rows={rows} 
+                onGo={handleGo}
             />
         </div>
     );

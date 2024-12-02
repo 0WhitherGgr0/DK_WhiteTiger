@@ -3,6 +3,8 @@ from rest_framework import routers
 from . import views
 from .views import RegistroVehiculoPlaca
 from .views import RegistroConductorID
+from .views import PedidosRuta
+from .views import UbicacionPedido
 
 router = routers.DefaultRouter()
 
@@ -36,5 +38,7 @@ urlpatterns = [
     path('conductores/', views.create_conductor, name='create_conductor'),
     path('vehiculos/', views.create_vehiculo, name='create_vehiculo'),
     path('vehiculosEstados/<str:placa>/', RegistroVehiculoPlaca.as_view(), name='vehiculo_estados'),
+    path('pedidosRuta/<str:id>/', PedidosRuta.as_view(), name='pedidos_ruta'),
+    path('ubicacionPedido/<str:id>/', UbicacionPedido.as_view(), name='ubicacion-pedido'),
     path('conductoresEstados/<str:id>/', RegistroConductorID.as_view(), name='conductor_estados')
 ]

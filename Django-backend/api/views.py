@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
+from django.shortcuts import get_object_or_404
 
 from .models import (
     Cliente, Producto, Ubicacion, Pedido, Linea, Usuario, Vehiculo, Conductor, Recorrido, Envio,
@@ -183,6 +184,19 @@ def create_vehiculo(request):
     else:
         return Response({'success': False, 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+
+class UbicacionPedido(ListAPIView):
+    serializer_class = UbicacionSerializer
+    def get_queryset(self):
+        pedido = self.kwargs['id']
+        ubicacion = Pedido.objects.get(pedido_id = pedido) 
+        return Ubicacion.objects.filter(ubicacion_id=ubicacion.ubicacion_id.ubicacion_id)
+
+class PedidosRuta(ListAPIView):
+    serializer_class = EnvioSerializer
+    def get_queryset(self):
+        recorrido = self.kwargs['id']
+        return Envio.objects.filter(recorrido_id=recorrido)
 
 class RegistroConductorID(ListAPIView):
     serializer_class = RegistroConductorSerializer

@@ -2,6 +2,7 @@ import * as React from 'react';
 import editPart1SVG from "../assets/edit1.svg";
 import editPart2SVG from "../assets/edit2.svg";
 import removeSVG from "../assets/remove.svg";
+import mapaSVG from "../assets/rute.svg"
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from '@mui/material/TableBody';
@@ -29,7 +30,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
 }));
 
-export default function TableCrud({ heads, rows, onEdit, onDelete }) {
+export default function TableCrud({ heads, rows, onEdit, onDelete, onGo }) {
 
     const VirtuosoTableComponents = {
         Scroller: React.forwardRef((props, ref) => (
@@ -105,7 +106,19 @@ export default function TableCrud({ heads, rows, onEdit, onDelete }) {
                                         <img src={removeSVG} alt="Eliminar" />
                                     </button>
                                 </div>
-                            ) : (
+                            ) : head.key === "mapa" ? 
+                            (
+                                <div className="panelCRUD_tableOptions">
+                                    <button
+                                        className="panelCRUD_tableIcon transparent-button"
+                                        onClick={() => onGo(row.idRuta)}
+                                        title="Eliminar"
+                                    >
+                                        <img  src={mapaSVG} alt="Ingresar Mapa" />
+                                    </button>
+                                </div>
+                            )
+                            :(
                                 value
                             )
                         }

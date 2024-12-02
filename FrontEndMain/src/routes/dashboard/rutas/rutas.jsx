@@ -10,13 +10,13 @@ import calculateDistance from './routerDistance';
 import Orden from './orden';
 import TabuSearch from './tabuSearch';
 import getDistance from './routerMachineDistance';
-import { Form, useLoaderData } from 'react-router-dom';
+import { Form, redirect, useLoaderData } from 'react-router-dom';
 
 export async function action({ request }) {
     const API_URL = import.meta.env.VITE_API_URL;
     const formData = await request.formData();
     const vehiculos = JSON.parse(formData.get("vehiculos"));
-    const allResponses = await Promise.all(vehiculos.forEach(async (vehiculo) => {
+    await Promise.all(vehiculos.map(async (vehiculo) => {
             console.log(vehiculo);
             //Modificar Estados
             const conductor = vehiculo.id_conductor;
@@ -205,7 +205,7 @@ export default function Rutas(){
                 }
             }
         }
-
+        console.log("wa")
         let solucion = new TabuSearch(numVehiculos,numPedidos,initialVehiculos);
         solucion.solucionInicial(pedidos,distancias);
         solucion.tabuSearch(TABU,distancias)

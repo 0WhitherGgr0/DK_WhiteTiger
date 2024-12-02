@@ -11,6 +11,7 @@ import ErrorPage from "./routes/error-page";
 import Login from "./routes/login";
 import Dashboard from "./routes/dashboard/dashboard";
 import Panel from "./routes/dashboard/panel/panel";
+import MiRuta, {action as miRutaAction} from "./routes/dashboard/Solicitudes/miRuta";
 
 import RutasVista from "./routes/dashboard/flotas/rutasVista";
 import FormVehiculo from "./routes/dashboard/flotas/formVehiculo";
@@ -29,6 +30,7 @@ import { loaderPedidos } from "./routes/loaders/loaderPedidos";
 import FormPedido from "./routes/dashboard/Solicitudes/formPedido";
 import { action as pedidoCreate } from "./routes/dashboard/Solicitudes/formPedido";
 import Ordenes from "./routes/dashboard/Solicitudes/ordenes";
+import { loaderMiRuta } from "./routes/loaders/loaderMiRuta";
 
 import Flotas from "./routes/dashboard/flotas/flotas";
 import Rutas, {action as RutasAction} from "./routes/dashboard/rutas/rutas";
@@ -55,10 +57,21 @@ const router = createBrowserRouter([
         <Dashboard />
       </PrivateRoute>
     ),
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
         element: <Panel/>
+      },
+      {
+        path: "ruta/:idRuta",
+        element: (
+          <PrivateRoute allowedRoles={['admin', 'conductor']}>
+            <MiRuta />
+          </PrivateRoute>
+        ),
+        loader: loaderMiRuta,
+        action: miRutaAction
       },
       {
         path: "solicitudes",

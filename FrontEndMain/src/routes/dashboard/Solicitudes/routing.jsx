@@ -10,8 +10,7 @@ const routerService = new L.Routing.osrmv1({
 
 function addRoute(sourceCity,destinationCity,map,constrolArray,color){
   
-
-  const routingControl = L.Routing.control({
+    const routingControl = L.Routing.control({
         waypoints: [
           sourceCity,
           destinationCity,

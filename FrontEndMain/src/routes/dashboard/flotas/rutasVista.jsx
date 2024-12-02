@@ -7,21 +7,27 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Conductores() {
     const { recorridos: initialRecorridos = []} = useLoaderData();
-
+    const navigate = useNavigate();
     const [recorridos, setRecorridos] = useState(initialRecorridos);
     console.log(recorridos)
     const heads = [
+        { id: 'ID', key: "idRuta", special: "", minWidth: 100 },
         { id: 'Conductor', key: "nombre", special: "", minWidth: 100 },
         { id: 'Vehículo', key: "vehiculo", special: "", minWidth: 100 },
         { id: 'Estado', key: "estado", special: "", minWidth: 300 },
         { id: 'Carga', key: "carga", special: "", minWidth: 117 },
         { id: 'Distancia', key: "distancia", special: "", minWidth: 117 },
-        { id: 'Opciones', key: "opciones", special: "", minWidth: 117 },
+        { id: 'Ruta', key: "mapa", special: "", minWidth: 117 },
     ];
+
+    const handleGo = (idRuta) => {
+        navigate(`/dashboard/ruta/${idRuta}`);
+    };
 
     const rows = recorridos.map((recorrido) => {
         // Obtiene el nombre del estado usando el mapeo `estados`
         return {
+            idRuta: recorrido.recorrido_id,
             nombre: recorrido.usuario_asociado,
             vehiculo: recorrido.vehiculo_id || "Sin vehículo asignado",
             estado: recorrido.estado_nombre || "Sin nombre",
@@ -40,6 +46,7 @@ export default function Conductores() {
             <TableCrud 
                 heads={heads} 
                 rows={rows} 
+                onGo={handleGo}
             />
         </div>
     );
