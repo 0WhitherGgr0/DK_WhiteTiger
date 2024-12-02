@@ -31,7 +31,7 @@ import { action as pedidoCreate } from "./routes/dashboard/Solicitudes/formPedid
 import Ordenes from "./routes/dashboard/Solicitudes/ordenes";
 
 import Flotas from "./routes/dashboard/flotas/flotas";
-import Rutas from "./routes/dashboard/rutas/rutas";
+import Rutas, {action as RutasAction} from "./routes/dashboard/rutas/rutas";
 import Vehiculos from "./routes/dashboard/flotas/vehiculos";
 import Conductores from "./routes/dashboard/flotas/conductores";
 import { loaderConductores } from "./routes/loaders/loaderConductores";
@@ -39,6 +39,7 @@ import UsuarioDetalles, {loader as UsuarioDetallesloader} from "./routes/dashboa
 import VehiculosActivos from "./routes/dashboard/flotas/vehiculosActivos";
 
 import { loaderPeticiones } from "./routes/loaders/loaderPeticiones";
+import { loaderRecorridos } from "./routes/loaders/loaderRecorridos";
 
 const router = createBrowserRouter([
   {
@@ -126,7 +127,8 @@ const router = createBrowserRouter([
               <PrivateRoute allowedRoles={['admin']}>
                 <RutasVista />
               </PrivateRoute>
-            )
+            ),
+            loader: loaderRecorridos
           },
           {
             path: "vehiculos/nuevoVehiculo",
@@ -187,6 +189,7 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: loaderPeticiones,
+        action: RutasAction
       },
       {
         path: "user",

@@ -15,6 +15,12 @@
   height: 100%;
 }
 
+.buttonGroup{
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+}
+
 .rutas_button{
   background-color: var(--blue3);
   color: white;

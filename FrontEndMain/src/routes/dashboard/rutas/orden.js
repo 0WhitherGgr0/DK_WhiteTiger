@@ -1,6 +1,7 @@
 class Orden{
-    constructor(id,posx,posy,demand){
+    constructor(id,posx,posy,demand, pedido_id){
         this.id = id
+        this.pedido_id = pedido_id
         this.posx = posx
         this.posy = posy
         this.demand = demand

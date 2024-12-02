@@ -8,7 +8,7 @@ function getRandom(start,end){
 
 class TabuSearch{
 
-    constructor(numberV, numberP, capacity){
+    constructor(numberV, numberP, initialVehicles){
         this.numberVehicles = numberV;
         this.numberPedidos = numberP;
         this.coste = 0;
@@ -17,9 +17,22 @@ class TabuSearch{
         this.vehiculosSolucion = []
         this.vehiculosGreedy = []
         for(let i = 0;i<numberV;i++){
-            this.vehiculos.push(new Vehiculo(i+1,capacity));
-            this.vehiculosSolucion.push(new Vehiculo(i+1,capacity));
+            this.vehiculos.push(new Vehiculo(
+                i+1,
+                Number(initialVehicles[i].vehiculo_capacidad),
+                initialVehicles[i].conductor_id,
+                initialVehicles[i].vehiculo_placa,
+                Number(initialVehicles[i].vehiculo_distancia),
+            ));
+            this.vehiculosSolucion.push(new Vehiculo(
+                i+1,
+                Number(initialVehicles[i].vehiculo_capacidad),
+                initialVehicles[i].conductor_id,
+                initialVehicles[i].vehiculo_placa,
+                Number(initialVehicles[i].vehiculo_distancia),
+            ));
         }
+        console.log("Vehiculos obtenidos: ", this.vehiculos)
     }
 
     pedidosNoAsignados(pedidos){

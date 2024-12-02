@@ -230,12 +230,16 @@ def crearEstadosVehiculo(sender, instance, created, **kwargs):
         )
 
 @receiver(post_save, sender=Conductor)
-def crearEstadosVehiculo(sender, instance, created, **kwargs):
+def crearEstadosConductor(sender, instance, created, **kwargs):
     print(instance)
     if created: 
         RegistroConductor.objects.create(
             conductor_id = instance,
-            estado_id = Estado.objects.get(estado_id = 6)
+            estado_id = Estado.objects.get(estado_id = 2)
+        )
+        RegistroConductor.objects.create(
+            conductor_id = instance,
+            estado_id = Estado.objects.get(estado_id = 7)
         )
         RegistroConductor.objects.create(
             conductor_id = instance,

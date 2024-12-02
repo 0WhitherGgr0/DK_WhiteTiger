@@ -35,7 +35,6 @@ export async function action({ request }) {
   let idEstadoChange;
   
   misEstados.forEach(estado => {
-
     if(estado.estado_id == 6){
       idEstadoChange = estado.id;
     }
