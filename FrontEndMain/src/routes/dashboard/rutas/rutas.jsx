@@ -210,9 +210,22 @@ export default function Rutas(){
         solucion.solucionInicial(pedidos,distancias);
         solucion.tabuSearch(TABU,distancias)
         let saveSol =solucion.vehiculosSolucion
+        let saveSolConfirmado = saveSol.filter((sol) => {
+            if(sol.ruta.length >= 3){
+                return true;
+            }
+            return false;
+        })
         console.log("Solucion", saveSol);
+        console.log("Solucion", saveSolConfirmado);
+
+        if(saveSolConfirmado.length == 0){
+            alert("No se han podido generar rutas, ingrese vehiculos o pedidos");
+            return 0;
+        }
+
         setGenerado(true);
-        setVehiculos(saveSol);
+        setVehiculos(saveSolConfirmado);
     }
 
 
