@@ -5,9 +5,8 @@ import { useNavigate, useLoaderData } from "react-router-dom";
 
 const heads = [
     { id: "Placa Vehicular", key: "placa", special: "", minWidth: 80 },
-    { id: "Capacidad Usada", key: "capacidad", special: "special", minWidth: 112 },
-    { id: "Maxima Capacidad", key: "maxCapacidad", special: "special", minWidth: 112 },
-    { id: "Maxixmo Recorrido", key: "maxRecorrido", special: "special", minWidth: 112 },
+    { id: "Maxima Capacidad (m^3)", key: "maxCapacidad", special: "special", minWidth: 112 },
+    { id: "Maxixmo Recorrido (m)", key: "maxRecorrido", special: "special", minWidth: 112 },
     { id: "Estado", key: "estado", special: "", minWidth: 150 },
     { id: "Opciones", key: "opciones", special: "", minWidth: 117 },
 ];
@@ -19,8 +18,7 @@ export default function Vehiculos() {
     // Crear las filas de la tabla
     const rows = initialVehiculos.map((vehiculo) => ({
         placa: vehiculo.vehiculo_placa,
-        capacidad: vehiculo.vehiculo_capacidad,
-        maxCapacidad: vehiculo.vehiculo_max_dist_dia,
+        maxCapacidad: vehiculo.vehiculo_capacidad,
         maxRecorrido: vehiculo.vehiculo_max_dist_dia,
         estado: vehiculo.estado_nombre,
         usuario: vehiculo.usuario_asociado,

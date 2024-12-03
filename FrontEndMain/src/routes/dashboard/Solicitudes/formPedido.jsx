@@ -168,7 +168,7 @@ export default function FormPedido() {
                   />
                   <TextInput
                     containerClass="panelCRUD_formInput"
-                    info="Peso"
+                    info="Peso (Kg)"
                     name="peso_total"
                     type="text"
                     placeholder="0.00"
@@ -178,7 +178,7 @@ export default function FormPedido() {
                   />
                   <TextInput
                     containerClass="panelCRUD_formInput"
-                    info="Volumen"
+                    info="Volumen (m^3)"
                     name="volumen"
                     type="text"
                     placeholder="0.00"

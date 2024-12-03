@@ -226,7 +226,7 @@ def crearEstadosVehiculo(sender, instance, created, **kwargs):
         )
         RegistroVehiculo.objects.create(
             vehiculo_placa = instance,
-            estado_id = Estado.objects.get(estado_id = 9)
+            estado_id = Estado.objects.get(estado_id = 10)
         )
 
 @receiver(post_save, sender=Conductor)
@@ -243,5 +243,5 @@ def crearEstadosConductor(sender, instance, created, **kwargs):
         )
         RegistroConductor.objects.create(
             conductor_id = instance,
-            estado_id = Estado.objects.get(estado_id = 9)
+            estado_id = Estado.objects.get(estado_id = 10)
         )

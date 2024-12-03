@@ -25,6 +25,8 @@
     align-content: center;
 }
 
+
+
 .headerBox_nav{
     display: flex;
     gap: 36px;
@@ -39,6 +41,11 @@
     align-content: center;
     text-decoration: none;
     color: black;
+    transition: transform 0.2s ease-in-out;
+}
+
+.headerBox_link:hover{
+    transform: scale(1.2);
 }
 
 .headerBox_link--active{

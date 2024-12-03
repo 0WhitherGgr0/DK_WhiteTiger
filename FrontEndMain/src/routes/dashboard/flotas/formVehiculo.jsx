@@ -141,7 +141,7 @@ export default function FormVehiculo() {
             />
             <TextInput 
               containerClass="panelCRUD_formInput"
-              info="Máximo Recorrido" 
+              info="Máximo Recorrido (m)" 
               name="maximo_recorrido"
               placeholder='Ej: 100.00'
               type='text'
@@ -150,7 +150,7 @@ export default function FormVehiculo() {
             /> 
             <TextInput 
               containerClass="panelCRUD_formInput"
-              info="Máxima Capacidad" 
+              info="Máxima Capacidad (m^3)" 
               name="maxima_capacidad" 
               placeholder="Ej: 4.5" 
               type="text"

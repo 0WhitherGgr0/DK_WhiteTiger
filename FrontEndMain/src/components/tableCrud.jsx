@@ -67,16 +67,19 @@ export default function TableCrud({ heads, rows, onEdit, onDelete, onGo }) {
                             head.key === "estado" ? (
                                 <div className="panelCRUD_tableStates">
                                     {Array.isArray(row.estado) ? (
-                                        row.estado.map((item) => (
-                                            <div
-                                                className={`panelCRUD_tableState panelCRUD_tableState--${item}`}
-                                                key={item}
-                                            >
-                                                <p>{item}</p>
-                                            </div>
-                                        ))
+                                        row.estado.map((item) => {
+                                            const newName = item.replace(/\s+/g, '');
+                                            return (
+                                                <div
+                                                    className={`panelCRUD_tableState panelCRUD_tableState--${newName}`}
+                                                    key={item}
+                                                >
+                                                    <p>{item}</p>
+                                                </div>
+                                            )
+                                        })
                                     ) : (
-                                        <div className={`panelCRUD_tableState panelCRUD_tableState--${row.estado}`}>
+                                        <div className={`panelCRUD_tableState panelCRUD_tableState--${row.estado.replace(/\s+/g, '')}`}>
                                             <p>{row.estado}</p>
                                         </div>
                                     )}

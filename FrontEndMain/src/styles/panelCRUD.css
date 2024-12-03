@@ -80,6 +80,22 @@
     line-height: 21px;
 }
 
+.panelCRUD_tableState--Recibido, .panelCRUD_tableState--Creado, .panelCRUD_tableState--Sinasignar, .panelCRUD_tableState--Libre{
+    background-color: var(--blue1);
+}
+
+.panelCRUD_tableState--Nodisponible, .panelCRUD_tableState--Fallido, .panelCRUD_tableState--Devuelto, .panelCRUD_tableState--Noentregado{
+    background-color: var(--red2);
+}
+
+.panelCRUD_tableState--Disponible, .panelCRUD_tableState--Asignado, .panelCRUD_tableState--Ocupado{
+    background-color: rgb(226, 194, 32);
+}
+
+.panelCRUD_tableState--Terminado, .panelCRUD_tableState--Exito, .panelCRUD_tableState--Entregado{
+    background-color: var(--green2);
+}
+
 .panelCRUD_tableState--Activo{
     background-color: var(--blue1);
 }
@@ -178,6 +194,12 @@
     text-align: right;
     width: 32px;
     height: 32px;
+    transition: transform 0.2s ease-in-out, opacity 0.2s;
+}
+
+.panelCRUD_tableIcon:hover{
+    opacity: 0.7;
+    transform: scale(1.2);
 }
 
 .panelCRUD_iconJoiner{

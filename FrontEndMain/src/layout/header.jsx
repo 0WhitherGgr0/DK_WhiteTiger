@@ -22,14 +22,14 @@ export default function Header() {
             <div className="headerBox_nav">             
                 {/* visible para todos*/}
                 
-                <HeaderLink link={"/dashboard"} text={"Panel"}/> 
-                <HeaderLink link={"/dashboard/rutas"} text={"Rutas"}/>
+                <HeaderLink link={"/dashboard"} text={"Panel"} check={true} /> 
+                <HeaderLink link={"/dashboard/rutas"} text={"Rutas"} route='/dashboard/rutas'/>
 
                 {/* Solo admin */}
                 {role === "admin" && (
                     <>
-                        <HeaderLink link={"/dashboard/flotas/vehiculos"} text={"Flota"}/>
-                        <HeaderLink link={"/dashboard/solicitudes/ordenes"} text={"Solicitudes"}/>
+                        <HeaderLink link={"/dashboard/flotas/vehiculos"} text={"Flota"} route='/dashboard/flotas'/>
+                        <HeaderLink link={"/dashboard/solicitudes/ordenes"} text={"Solicitudes"} route='/dashboard/solicitudes'/>
                     </>
                 )}
 
