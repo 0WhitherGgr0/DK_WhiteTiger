@@ -31,11 +31,18 @@
   text-align: center;
   border: none;
   padding: 10px 16px;
+  display: flex;
   border-radius: 12px;
   gap: 8px;
   align-items: center;
+  margin-left: 10px;
+  transition: all 0.3s ease; 
 }
-
+.rutas_button:hover {
+  background-color: var(--blue2); 
+  transform: scale(1.05); 
+  cursor: pointer; 
+}
 .leaflet-routing-container {
   display: none;
 }
