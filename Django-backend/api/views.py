@@ -96,7 +96,7 @@ def register(request):
 
         # Buscar el rol "conductor" en la base de datos
         try:
-            rol_conductor = RolUsuario.objects.get(rol_nombre="conductor")
+            rol_conductor = RolUsuario.objects.get(rol_nombre="Empleado")
         except RolUsuario.DoesNotExist:
             return Response({"message": "El rol 'empleado' no existe en la base de datos"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
