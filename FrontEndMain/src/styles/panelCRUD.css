@@ -21,7 +21,7 @@
     justify-content: right;
 }
 
-.panelCRUD_button{
+.panelCRUD_button {
     background-color: var(--blue3);
     color: white;
     font-family: "Work Sans", sans-serif;
@@ -36,7 +36,15 @@
     gap: 8px;
     align-items: center;
     margin-left: 10px;
+    transition: all 0.3s ease; 
 }
+
+.panelCRUD_button:hover {
+    background-color: var(--blue2); 
+    transform: scale(1.05); 
+    cursor: pointer; 
+}
+
 
 .panelCRUD_icon{
     align-content: center;
@@ -45,9 +53,19 @@
     padding-top: 2px;
 }
 
-.panelCRUD_tableStates{
-    display: flex;
-    gap: 12.5px;
+.panelCRUD_tableState {
+    border-radius: 12px;
+    padding: 5.5px 21px;
+    margin: 10px 0;
+    background-color: var(--green2);
+    flex: 1 1 auto; 
+    text-align: center;
+    font-family: "Work Sans", sans-serif;
+    font-weight: 500;
+    font-size: clamp(12px, 2vw, 14px); 
+    line-height: 1.5; /* Relativo para mejor escalabilidad */
+    word-wrap: break-word; /* Permite que el texto se envuelva */
+    white-space: normal; /* Permite el ajuste de línea */
 }
 
 .panelCRUD_tableState{

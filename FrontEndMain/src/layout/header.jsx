@@ -5,7 +5,7 @@ import bellSVG from "../assets/bell.svg"
 import Sign_Out from "../assets/logout.svg"
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-
+import logo from "../assets/logo.svg";
 export default function Header() {
     const { role, logout } = useAuth(); 
     const navigate = useNavigate();
@@ -17,7 +17,8 @@ export default function Header() {
 
     return (
         <nav className="headerBox">
-            <h1 className="headerBox_tittle">RoadMap Pro</h1>
+ 
+            <img src={logo} alt="" />
             <div className="headerBox_nav">             
                 {/* visible para todos*/}
                 
@@ -37,10 +38,6 @@ export default function Header() {
                 }}>
                     <img src={userSVG} alt="Usuario" />
                 </button>
-                <button className="headerBox_icon">
-                    <img src={bellSVG} alt="Notificaciones" />
-                </button>
-
                 <button className="headerBox_icon" onClick={handleLogout}>
                     <img src={Sign_Out} alt="Cerrar sesión" />
                 </button>
