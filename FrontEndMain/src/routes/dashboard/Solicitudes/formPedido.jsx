@@ -51,7 +51,7 @@ export async function action({ request }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dataP),
     });
-
+    
     if (!response.ok) throw new Error("Error al enviar datos");
     return redirect("/dashboard/solicitudes/pedidos");
   } catch (error) {
